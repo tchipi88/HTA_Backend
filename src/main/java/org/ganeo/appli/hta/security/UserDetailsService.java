@@ -5,7 +5,6 @@
  */
 package org.ganeo.appli.hta.security;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,10 +14,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.ganeo.appli.hta.model.CHW;
+import org.ganeo.appli.hta.model.Medecin;
 import org.ganeo.appli.hta.model.Profil;
 import org.ganeo.appli.hta.model.User;
 import org.ganeo.appli.hta.repository.UserRepository;
@@ -42,13 +42,13 @@ public class UserDetailsService implements org.springframework.security.core.use
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         Optional<User> userFromDatabase = userRepository.findOneByUsername(lowercaseLogin);
         return userFromDatabase.map(user -> {
-               List<GrantedAuthority> grantedAuthorities =Stream.of(Profil.ADMIN)
-                .map(authority -> new SimpleGrantedAuthority(authority.name()))
-                .collect(Collectors.toList());
+            List<GrantedAuthority> grantedAuthorities = Stream.of((user instanceof CHW ? Profil.CHW : (user instanceof Medecin ? Profil.MEDECIN : Profil.ADMIN)))
+                    .map(authority -> new SimpleGrantedAuthority(authority.name()))
+                    .collect(Collectors.toList());
             return new org.springframework.security.core.userdetails.User(lowercaseLogin,
-                user.getPassword(),
-                grantedAuthorities);
-        }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
-        "database"));
+                    user.getPassword(),
+                    grantedAuthorities);
+        }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the "
+                + "database"));
     }
 }

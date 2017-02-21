@@ -5,15 +5,18 @@
  */
 package org.ganeo.appli.hta.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -24,25 +27,27 @@ import org.hibernate.annotations.NaturalId;
  *
  * @author tchipnangngansopa
  */
-@Entity   
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)  
-@DiscriminatorColumn(name="profil",discriminatorType=DiscriminatorType.STRING)  
-public class User extends Personne{
-    
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "profil", discriminatorType = DiscriminatorType.STRING)
+public class User extends Personne {
+
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true, nullable = false)
     @NaturalId
     private String username;
-    
+
+    @NotNull
+    @JsonIgnore
     private String password;
-    
+
     @NotNull
     private boolean activated = false;
-    
-    @Size(min = 2, max = 5)
-    private String langKey;
+
+    @Enumerated
+    private Language langKey;
 
     public String getUsername() {
         return username;
@@ -68,13 +73,12 @@ public class User extends Personne{
         this.activated = activated;
     }
 
-    public String getLangKey() {
+    public Language getLangKey() {
         return langKey;
     }
 
-    public void setLangKey(String langKey) {
+    public void setLangKey(Language langKey) {
         this.langKey = langKey;
     }
-    
-   
+
 }

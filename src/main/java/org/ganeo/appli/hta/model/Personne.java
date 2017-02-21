@@ -6,6 +6,7 @@
 package org.ganeo.appli.hta.model;
 
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
@@ -26,6 +27,21 @@ public abstract class Personne extends AbstractAuditingEntity {
     private String telephone;
 
     private String email;
+
+    private String ville;
+
+    private String quartier;
+
+    @Lob
+    private byte[] photo;
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
 
     public Personne() {
     }
@@ -68,6 +84,22 @@ public abstract class Personne extends AbstractAuditingEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getQuartier() {
+        return quartier;
+    }
+
+    public void setQuartier(String quartier) {
+        this.quartier = quartier;
     }
 
 }

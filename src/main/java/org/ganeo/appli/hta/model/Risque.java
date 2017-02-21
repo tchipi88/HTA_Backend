@@ -10,5 +10,5 @@ package org.ganeo.appli.hta.model;
  * @author tchipnangngansopa
  */
 public enum Risque {
-    Very_high,HIGH,Very_Low,Moderate,lOW,
+    Very_high,HIGH,Very_Low,Moderate,lOW;
 }

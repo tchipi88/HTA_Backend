@@ -37,7 +37,11 @@ spring:
         host:
         username:
         password:
-    
+    # DATA REST (RepositoryRestProperties)
+    data:
+        rest:
+            base-path: /hta/api
+            # Base path to be used by Spring Data REST to expose repository resources.
 security:
     basic:
         enabled: false

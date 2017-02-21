@@ -8,6 +8,7 @@ package org.ganeo.appli.hta.model;
 import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
@@ -28,10 +29,15 @@ public class Patient extends Personne {
     private Short taille;
 
     private Short poids;
+    
+    
+
 
     @NotNull
     @ManyToOne
     private CHW chw;
+    @ManyToOne
+    private Medecin medecin;
 
     private boolean fumeur;
 
@@ -199,5 +205,15 @@ public class Patient extends Personne {
     public void setHypertendu(boolean hypertendu) {
         this.hypertendu = hypertendu;
     }
+
+    public Medecin getMedecin() {
+        return medecin;
+    }
+
+    public void setMedecin(Medecin medecin) {
+        this.medecin = medecin;
+    }
+    
+    
 
 }

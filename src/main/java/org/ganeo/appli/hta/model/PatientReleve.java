@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @author tchipnangngansopa
  */
 @Entity
-public class Patient_Releve extends AbstractAuditingEntity{
+public class PatientReleve extends AbstractAuditingEntity{
     
     @NotNull
     @ManyToOne
@@ -25,7 +25,7 @@ public class Patient_Releve extends AbstractAuditingEntity{
     private Short pa_systolique;
     
     @NotNull
-    private short  pa_diastolique ;
+    private Short  pa_diastolique ;
     
     @NotNull
     private LocalDate date_releve;
