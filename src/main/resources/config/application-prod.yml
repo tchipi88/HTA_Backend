@@ -53,6 +53,8 @@ liquibase:
 
 server:
     port: 8080
+    servlet-path : /hta
+    display-name: HTA
     compression:
         enabled: true
         mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json

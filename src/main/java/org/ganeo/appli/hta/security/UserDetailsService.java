@@ -17,10 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.ganeo.appli.hta.model.CHW;
-import org.ganeo.appli.hta.model.Medecin;
-import org.ganeo.appli.hta.model.Profil;
-import org.ganeo.appli.hta.model.User;
+import org.ganeo.appli.hta.domain.CHW;
+import org.ganeo.appli.hta.domain.Medecin;
+import org.ganeo.appli.hta.domain.Profil;
+import org.ganeo.appli.hta.domain.User;
 import org.ganeo.appli.hta.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

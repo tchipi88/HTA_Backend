@@ -1,0 +1,121 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package [(${controllerpackage})];
+
+import [(${entitypackage})];
+import [(${repositorypackage})].[(${entity})]Repository;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import org.ganeo.appli.hta.util.*;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+
+/**
+ * REST controller for managing [(${entity})].
+ */
+@RestController
+@RequestMapping("/api")
+public class [(${entity})]Controller {
+
+    private final Logger log = LoggerFactory.getLogger([(${entity})]Controller.class);
+
+    private static final String ENTITY_NAME = "[(${ventity})]";
+        
+    private final [(${entity})]Repository [(${ventity})]Repository;
+
+    public [(${entity})]Controller([(${entity})]Repository [(${ventity})]Repository) {
+        this.[(${ventity})]Repository = [(${ventity})]Repository;
+    }
+
+    /**
+     * POST  /[(${ventity})]s : Create a new [(${ventity})].
+     *
+     * @param [(${ventity})] the [(${ventity})] to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new [(${ventity})], or with status 400 (Bad Request) if the [(${ventity})] has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/[(${ventity})]s")
+    public ResponseEntity<[(${entity})]> create[(${entity})](@Valid @RequestBody [(${entity})] [(${ventity})]) throws URISyntaxException {
+        log.debug("REST request to save [(${entity})] : {}", [(${ventity})]);
+        if ([(${ventity})].getId() != null) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new [(${ventity})] cannot already have an ID")).body(null);
+        }
+        [(${entity})] result = [(${ventity})]Repository.save([(${ventity})]);
+        return ResponseEntity.created(new URI("/api/[(${ventity})]s/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * PUT  /[(${ventity})]s : Updates an existing [(${ventity})].
+     *
+     * @param [(${ventity})] the [(${ventity})] to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated [(${ventity})],
+     * or with status 400 (Bad Request) if the [(${ventity})] is not valid,
+     * or with status 500 (Internal Server Error) if the [(${ventity})] couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping("/[(${ventity})]s")
+    public ResponseEntity<[(${entity})]> update[(${entity})](@Valid @RequestBody [(${entity})] [(${ventity})]) throws URISyntaxException {
+        log.debug("REST request to update [(${entity})] : {}", [(${ventity})]);
+        if ([(${ventity})].getId() == null) {
+            return create[(${entity})]([(${ventity})]);
+        }
+        [(${entity})] result = [(${ventity})]Repository.save([(${ventity})]);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, [(${ventity})].getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * GET  /[(${ventity})]s : get all the [(${ventity})]s.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of [(${ventity})]s in body
+     */
+    @GetMapping("/[(${ventity})]s")
+    public List<[(${entity})]> getAll[(${entity})]s() {
+        log.debug("REST request to get all [(${entity})]s");
+        List<[(${entity})]> [(${ventity})]s = [(${ventity})]Repository.findAll();
+        return [(${ventity})]s;
+    }
+
+    /**
+     * GET  /[(${ventity})]s/:id : get the "id" [(${ventity})].
+     *
+     * @param id the id of the [(${ventity})] to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the [(${ventity})], or with status 404 (Not Found)
+     */
+    @GetMapping("/[(${ventity})]s/{id}")
+    public ResponseEntity<[(${entity})]> get[(${entity})](@PathVariable Long id) {
+        log.debug("REST request to get [(${entity})] : {}", id);
+        [(${entity})] [(${ventity})] = [(${ventity})]Repository.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable([(${ventity})]));
+    }
+
+    /**
+     * DELETE  /[(${ventity})]s/:id : delete the "id" [(${ventity})].
+     *
+     * @param id the id of the [(${ventity})] to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/[(${ventity})]s/{id}")
+    public ResponseEntity<Void> delete[(${entity})](@PathVariable Long id) {
+        log.debug("REST request to delete [(${entity})] : {}", id);
+        [(${ventity})]Repository.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+}

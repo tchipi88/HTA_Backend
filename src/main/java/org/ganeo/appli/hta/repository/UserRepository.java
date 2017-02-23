@@ -5,18 +5,32 @@
  */
 package org.ganeo.appli.hta.repository;
 
+
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
-import org.ganeo.appli.hta.model.User;
+import org.ganeo.appli.hta.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
  *
- * @author tchipnangngansopa
+ * @author eisti
  */
-@RepositoryRestResource
-public interface UserRepository extends JpaRepository<User, Long>{
+/**
+ * Spring Data JPA repository for the User entity.
+ */
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    public Optional<User> findOneByUsername(String lowercaseLogin);
-    
+
+
+    Optional<User> findOneByResetKey(String resetKey);
+
+    Optional<User> findOneByEmail(String email);
+
+    Optional<User> findOneByUsername(String username);
+
+
+    @Override
+    void delete(User t);
+
 }
