@@ -1,0 +1,126 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()"   class="form-validation">
+
+    <div class="modal-header">
+        <button type="button" class="btn btn-link pull-right" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()"><i class="fa fa-remove"></i>  </button>
+        <h3 class="modal-title" id="myPatientConsultationLabel" >Créer ou modifier  PatientConsultation</h3>
+         <small class="text-muted" >Les champs * sont obligatoires</small>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="row">
+              <div class="col-sm-6">
+ <div class="form-group">
+ <label class="control-label"  for="field_id">Id</label>
+  <input  class="form-control"   type="text"  autocomplete="off"   id="field_id" ng-model="vm.patientConsultation.id"                     ng-readonly="true"  ng-required="false"    ng-maxlength="255"                      />
+ </div>
+ </div>
+ <div class="col-sm-6">
+ <div class="form-group">
+ <label class="control-label"  for="field_patient">Patient <span style="color:red" >*</span></label>
+ <div class="input-group">
+                        <ui-select ng-model="vm.patientConsultation.patient"    ng-required="true">
+                            <ui-select-match placeholder="Select Patient">{{$select.selected.lastName}}</ui-select-match>
+                            <ui-select-choices repeat="patient in vm.patients | filter: $select.search">
+                                <div ng-bind-html="patient.lastName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>  
+                        <span class="input-group-btn" >
+                            <button   ng-click="vm.zoomColumn('Patient','patient','patient', vm.patientConsultation.patient)" 
+                                      class="btn btn-default" type="button"  ng-hide="!vm.patientConsultation.patient">
+                                <span class="fa fa-eye"></span>
+                            </button>
+                            <button ng-click="vm.zoomColumn('Patient', 'patient','patient', {})"      
+                                    class="btn btn-default" type="button"  ng-hide="vm.patientConsultation.patient">
+                                <span class="fa fa-plus fw"></span>
+                            </button>
+                        </span>
+                    </div> </div>
+ </div>
+ <div class="col-sm-6">
+ <div class="form-group">
+ <label class="control-label"  for="field_medecin">Medecin <span style="color:red" >*</span></label>
+ <div class="input-group">
+                        <ui-select ng-model="vm.patientConsultation.medecin"    ng-required="true">
+                            <ui-select-match placeholder="Select Medecin">{{$select.selected.nom}}</ui-select-match>
+                            <ui-select-choices repeat="medecin in vm.medecins | filter: $select.search">
+                                <div ng-bind-html="medecin.nom | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>  
+                        <span class="input-group-btn" >
+                            <button   ng-click="vm.zoomColumn('Medecin','medecin','medecin', vm.patientConsultation.medecin)" 
+                                      class="btn btn-default" type="button"  ng-hide="!vm.patientConsultation.medecin">
+                                <span class="fa fa-eye"></span>
+                            </button>
+                            <button ng-click="vm.zoomColumn('Medecin', 'medecin','medecin', {})"      
+                                    class="btn btn-default" type="button"  ng-hide="vm.patientConsultation.medecin">
+                                <span class="fa fa-plus fw"></span>
+                            </button>
+                        </span>
+                    </div> </div>
+ </div>
+ <div class="col-sm-6">
+ <div class="form-group">
+ <label class="control-label"  for="field_dateConsultation">Date Consultation <span style="color:red" >*</span></label>
+  <div class="input-group">
+                    <input  id="field_dateConsultation" type="text" class="form-control" name="dateConsultation"    ng-required="true"  uib-datepicker-popup="{{dateformat}}"  ng-model="vm.patientConsultation.dateConsultation"  is-open="vm.datePickerOpenStatus.dateConsultation"
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('dateConsultation')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+ </div>
+ </div>
+ <div class="col-sm-6">
+ <div class="form-group">
+ <label class="control-label"  for="field_diagnosticHypertension">Diagnostic Hypertension</label>
+ <div class="form-control">
+            <label class="i-checks">
+                <input type="checkbox" checked  ng-model="vm.patientConsultation.diagnosticHypertension"   id="field_diagnosticHypertension"  name="diagnosticHypertension" /><i></i> 
+            </label>
+        </div>
+ </div>
+ </div>
+ <div class="col-sm-6">
+ <div class="form-group">
+ <label class="control-label"  for="field_diagnosticPrescriptionMedicale">Diagnostic Prescription Medicale</label>
+ <div class="form-control">
+            <label class="i-checks">
+                <input type="checkbox" checked  ng-model="vm.patientConsultation.diagnosticPrescriptionMedicale"   id="field_diagnosticPrescriptionMedicale"  name="diagnosticPrescriptionMedicale" /><i></i> 
+            </label>
+        </div>
+ </div>
+ </div>
+ <div class="col-sm-6">
+ <div class="form-group">
+ <label class="control-label"  for="field_prochaineVisiteConsultation">Prochaine Visite Consultation</label>
+  <div class="input-group">
+                    <input  id="field_prochaineVisiteConsultation" type="text" class="form-control" name="prochaineVisiteConsultation"    ng-required="false"  uib-datepicker-popup="{{dateformat}}"  ng-model="vm.patientConsultation.prochaineVisiteConsultation"  is-open="vm.datePickerOpenStatus.prochaineVisiteConsultation"
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('prochaineVisiteConsultation')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+ </div>
+ </div>
+ <div class="col-sm-6">
+ <div class="form-group">
+ <label class="control-label"  for="field_observation">Observation</label>
+   <textarea class="form-control" rows="3"  cols="30"   id="field_observation" ng-model="vm.patientConsultation.observation"                     ng-readonly="false"  ng-required="false"                     > </textarea>
+ </div>
+ </div>
+
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+        
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Annuler</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Enregister</span>
+        </button>
+    </div>
+</form>

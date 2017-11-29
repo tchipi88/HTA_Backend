@@ -1,0 +1,89 @@
+<!-- list -->
+<ul class="nav">
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span >Navigation</span>
+    </li>
+    <li ui-sref-active="active">
+        <a ui-sref="home">
+            <i class="fa fa-home icon text-info-lter"></i>
+            <span class="font-bold" >Accueil</span>
+        </a>
+    </li>
+    <li ng-class="{active: vm.$state.includes('admin')}"  has-authority="ROLE_ADMIN" >
+        <a href class="auto">      
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="glyphicon glyphicon-lock icon text-primary-dker"></i>
+            <span class="font-bold" >Securite</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span >Securite</span>
+                </a>
+            </li>
+           
+            <li ui-sref-active="active">
+                <a ui-sref="chw">
+                    <span>CHW</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="medecin">
+                    <span>Medecins</span>
+                </a>
+            </li>
+           
+
+        </ul>
+    </li>
+
+    <li  class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span > Modules</span>
+    </li>
+
+    <li>
+        <a href class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-users icon text-success"></i>
+            <span class="font-bold">Patients</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span>Patients</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="patient">
+                    <span>Patient</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="patient-bloodplessure">
+                    <span>Patient Blood Plessure</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="patient-bilan">
+                    <span>Patient Bilan</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="patient-consultation">
+                    <span>Patient Consultation</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+  
+
+
+</ul>
+<!-- / list -->
