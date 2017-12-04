@@ -1,14 +1,13 @@
 package com.tsoft.app.domain;
 
-import com.tsoft.app.domain.enumeration.Profil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tsoft.app.domain.enumeration.Profil;
 import java.time.Instant;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
 
 /**
@@ -40,12 +39,13 @@ public class User extends AbstractAuditingEntity {
 
     @Column
     private String telephone;
-    
+
     @NotNull
     private String town;
 
     private String district;
 
+    private String firebaseToken;
 
     @JsonIgnore
     @NotNull
@@ -61,8 +61,6 @@ public class User extends AbstractAuditingEntity {
     @Column(name = "activation_key", length = 20)
     @JsonIgnore
     private String activationKey;
-    
-
 
     @Size(max = 20)
     @Column(name = "reset_key", length = 20)
@@ -71,8 +69,6 @@ public class User extends AbstractAuditingEntity {
 
     @Column(name = "reset_date")
     private Instant resetDate = null;
-
-    
 
     public String getEmail() {
         return email;
@@ -106,10 +102,13 @@ public class User extends AbstractAuditingEntity {
         this.profil = profil;
     }
 
-    
+    public String getFirebaseToken() {
+        return firebaseToken;
+    }
 
-   
-   
+    public void setFirebaseToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -194,7 +193,6 @@ public class User extends AbstractAuditingEntity {
         this.telephone = telephone;
     }
 
-   
     public String getTown() {
         return town;
     }
@@ -210,9 +208,5 @@ public class User extends AbstractAuditingEntity {
     public void setDistrict(String district) {
         this.district = district;
     }
-    
-    
-    
 
-    
 }
