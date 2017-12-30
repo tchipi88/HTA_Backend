@@ -45,6 +45,8 @@
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <logger name="org.springframework" level="WARN"/>
+    <logger name="log4j.logger.org.hibernate.SQL" level="DEBUG"/>
+    <logger name="log4j.logger.org.hibernate.type.descriptor.sql" level="TRACE"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>

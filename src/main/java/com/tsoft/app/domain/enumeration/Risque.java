@@ -10,5 +10,5 @@ package com.tsoft.app.domain.enumeration;
  * @author tchipnangngansopa
  */
 public enum Risque {
-    VERY_HIGH, HIGH, VERY_LOW, MEDIUM, LOW;
+    LOW, MEDIUM, HIGH;
 }

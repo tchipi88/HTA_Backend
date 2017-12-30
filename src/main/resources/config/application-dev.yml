@@ -55,16 +55,16 @@ spring:
                   logs: target/elasticsearch/log
                   data: target/elasticsearch/data
     mail:
-        host: smtp.mail.yahoo.com
+        host: smtp.gmail.com
         port: 587
-        username: ngansop.arthur@yahoo.fr  #Replace this field with your Yahoo username.
-        password: yohTh9ch           #Replace this field with your Yahoo password.
+        username: ganeo.app@gmail.com  #Replace this field with your Yahoo username.
+        password: htaApp2017           #Replace this field with your Yahoo password.
         protocol: smtp
         tls: true
         properties.mail.smtp:
             auth: true
             starttls.enable: true
-            ssl.trust: smtp.mail.yahoo.com
+            ssl.trust: smtp.gmail.com
     messages:
         cache-seconds: 1
     thymeleaf:
@@ -111,8 +111,7 @@ jhipster:
             # security key (this key should be unique for your application, and kept secret)
             key: 96d7aa5b25b900d259884a7da184ffcf762c201a
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: TKBR_@localhost
-        base-url: http://127.0.0.1:8080
+        from: ganeo.app@gmail.com
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
@@ -142,4 +141,11 @@ jhipster:
 # https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
-application:
+application :
+    default-password: hta2017
+    #twilio
+    twilio: 
+        account-sid:
+        auth-token:
+        service-sid:
+        telephone-from:

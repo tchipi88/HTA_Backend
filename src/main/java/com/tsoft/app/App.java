@@ -3,7 +3,7 @@ package com.tsoft.app;
 
 
 
-import com.tsoft.app.config.ApplicationProperties;
+import com.tsoft.app.config.properties.ApplicationProperties;
 import com.tsoft.app.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
 

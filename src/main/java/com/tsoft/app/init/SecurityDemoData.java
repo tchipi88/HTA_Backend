@@ -9,10 +9,9 @@ import com.tsoft.app.domain.Chw;
 import com.tsoft.app.domain.Medecin;
 import com.tsoft.app.domain.Patient;
 import com.tsoft.app.domain.enumeration.Gender;
-import com.tsoft.app.domain.enumeration.Risque;
-import com.tsoft.app.repository.PatientRepository;
 import com.tsoft.app.service.ChwService;
 import com.tsoft.app.service.MedecinService;
+import com.tsoft.app.service.PatientService;
 import java.time.LocalDate;
 import javax.servlet.http.HttpServletRequest;
 import org.fluttercode.datafactory.impl.DataFactory;
@@ -31,7 +30,7 @@ public class SecurityDemoData implements DemoData {
     @Autowired
     ChwService chwService;
     @Autowired
-    PatientRepository patientWeightRepository;
+    PatientService patientService;
 
     @Override
     public void populateData(HttpServletRequest req) throws Exception {
@@ -54,8 +53,8 @@ public class SecurityDemoData implements DemoData {
                 for (int n = 1; n <= 15; n++) {
                     Patient p = new Patient();
                     p.setLastName(df.getLastName());
-                    p.setFistName(df.getFirstName());
-                    p.setBirthDay(LocalDate.now().minusYears(n));
+                    p.setFirstName(df.getFirstName());
+                    p.setBirthDay(LocalDate.now().minusYears(n * 3));
                     p.setBirthPlace(df.getCity());
                     p.setGender(n % 2 == 0 ? Gender.F : Gender.M);
                     p.setTown(n % 2 == 0 ? "Yaounde" : "Douala");
@@ -64,8 +63,6 @@ public class SecurityDemoData implements DemoData {
                     p.setDistrict(df.getAddress());
                     p.setHeight(df.getNumberBetween(159, 200));
                     p.setWeight(75.5F);
-
-                    p.setCvdRisk(Risque.MEDIUM);
 
                     p.setPaDiastolique(df.getNumberBetween(100, 280));
                     p.setPaSystolique(df.getNumberBetween(100, 140));
@@ -79,7 +76,7 @@ public class SecurityDemoData implements DemoData {
 
                     p.setChw(chw);
 
-                    patientWeightRepository.save(p);
+                    patientService.createPatient(p);
 
                 }
 

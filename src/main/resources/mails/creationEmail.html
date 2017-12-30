@@ -3,21 +3,19 @@
     <head>
         <title th:text="#{email.activation.title}">HTA creation</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="shortcut icon" href="${baseUrl}/favicon.ico" />
     </head>
     <body>
-        <p th:text="#{email.activation.greeting(${user.email})}">
+        <p th:text="#{email.activation.greeting(${user.nom})}">
             Dear
         </p>
         <p th:text="#{email.creation.text1}">
-            Your HTA account has been created, please click on the URL below to access it:
+            Your HTA account has been created, please download the Android Apps and  log in with this credentials:
+        </p>
+         <p>
+          Login :   [(${user.email})]
         </p>
         <p>
-          <a th:href="@{|${baseUrl}/#/reset/finish?key=${user.resetKey}|}"
-             th:text="|${user.email}|">Login</a>
-        </p>
-        <p>
-          Mot de passe  :  
+          Mot de passe  :  hta2017
         </p>
         <p>
             <span th:text="#{email.activation.text2}">Regards, </span>

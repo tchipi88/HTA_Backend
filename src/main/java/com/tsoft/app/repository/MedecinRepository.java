@@ -6,6 +6,7 @@
 package com.tsoft.app.repository;
 
 import com.tsoft.app.domain.Medecin;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -17,10 +18,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MedecinRepository extends JpaRepository<Medecin, Long> {
 
-    
+    public Optional<Medecin> findOneByEmail(String email);
 
 }
-
-
-
-

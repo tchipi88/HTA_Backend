@@ -5,8 +5,7 @@
  */
 package com.tsoft.app.repository;
 
-import com.tsoft.app.domain.PatientBloodplessure;
-import java.time.LocalDate;
+import com.tsoft.app.domain.PatientTargetchanges;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,8 +16,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Spring Data JPA repository for the PatientBloodplessure entity.
  */
-public interface PatientBloodplessureRepository extends JpaRepository<PatientBloodplessure, Long> {
+public interface PatientTargetchangesRepository extends JpaRepository<PatientTargetchanges, Long> {
 
-    public List<PatientBloodplessure> findAllByPatientIdAndDateReleveBetweenOrderByDateReleveAsc(Long patientId, LocalDate fromDate, LocalDate toDate);
+    public List<PatientTargetchanges> findByPatientId(Long patientId);
+
+    public List<PatientTargetchanges> findByPatientIdOrderByDateTargetDesc(Long patientId);
 
 }

@@ -5,16 +5,16 @@
  */
 package com.tsoft.app.init;
 
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import com.tsoft.app.domain.User;
 import com.tsoft.app.domain.enumeration.Profil;
 import com.tsoft.app.repository.UserRepository;
 import com.tsoft.app.service.util.RandomUtil;
 import java.time.Instant;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -35,18 +35,17 @@ public class SecurityRealData implements RealData {
 
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode("admin");
-        newUser.setEmail("admin@hta.com");
+        newUser.setEmail("ganeo.app@gmail.com");
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setNom("admin");
-        newUser.setTown("");
+        newUser.setTown("Paris");
         // new user is not active
         newUser.setActivated(true);
         // new user gets registration key
         newUser.setProfil(Profil.ROLE_ADMIN);
         newUser.setResetKey(RandomUtil.generateResetKey());
         newUser.setResetDate(Instant.now());
-
 
         UserRepository.save(newUser);
 

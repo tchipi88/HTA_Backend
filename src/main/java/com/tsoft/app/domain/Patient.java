@@ -6,11 +6,10 @@
 package com.tsoft.app.domain;
 
 import com.tsoft.app.domain.enumeration.Education;
-
+import com.tsoft.app.domain.enumeration.Gender;
 import com.tsoft.app.domain.enumeration.RecommandationFrequenceProgramSuvi;
 import com.tsoft.app.domain.enumeration.RecommandationVisitDoctor;
 import com.tsoft.app.domain.enumeration.Risque;
-import com.tsoft.app.domain.enumeration.Gender;
 import com.tsoft.app.domain.enumeration.StatutMarital;
 import com.tsoft.app.service.template.Libelle;
 import java.time.LocalDate;
@@ -42,7 +41,8 @@ public class Patient extends AbstractAuditingEntity {
     @Libelle
     private String lastName;
 
-    private String fistName;
+    private String firstName;
+
     @Enumerated
     @NotNull
     private Gender gender;
@@ -73,12 +73,15 @@ public class Patient extends AbstractAuditingEntity {
     private boolean hypertensionFamily;
 
     private boolean bloodPressureMesured;
-    private LocalDate lastDateBloodPressureMesured;
+
+    private LocalDate dateLastBloodPressureMesured;
+
     private boolean bloodPressureTreatement;
     private boolean hypertension;
     private boolean diabetique;
     private boolean heartAttack;
     private boolean stroke;
+
     private String lastDoctorVisit;
 
     private Integer height;
@@ -109,12 +112,22 @@ public class Patient extends AbstractAuditingEntity {
     @Enumerated
     private RecommandationVisitDoctor recommandationVisitDoctor;
 
+    private LocalDate dateLastConsultation;
     private boolean consulte;
     private boolean diagnosticHypertension;
     private boolean diagnosticPrescriptionMedicale;
-    private LocalDate prochaineVisiteConsultation;
-    private LocalDate datePremierBilan;
-    private LocalDate dateDernierBilan;
+
+    private LocalDate dateNextConsultation;
+
+    private LocalDate dateFirstBilan;
+
+    private LocalDate dateLastBilan;
+
+    private boolean bilanChecked;
+
+    private boolean defineTarget;
+
+    private LocalDate dateLastDefineTarget;
 
     public Patient() {
     }
@@ -135,12 +148,12 @@ public class Patient extends AbstractAuditingEntity {
         this.lastName = lastName;
     }
 
-    public String getFistName() {
-        return fistName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFistName(String fistName) {
-        this.fistName = fistName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public Gender getGender() {
@@ -255,12 +268,12 @@ public class Patient extends AbstractAuditingEntity {
         this.bloodPressureMesured = bloodPressureMesured;
     }
 
-    public LocalDate getLastDateBloodPressureMesured() {
-        return lastDateBloodPressureMesured;
+    public LocalDate getDateLastBloodPressureMesured() {
+        return dateLastBloodPressureMesured;
     }
 
-    public void setLastDateBloodPressureMesured(LocalDate lastDateBloodPressureMesured) {
-        this.lastDateBloodPressureMesured = lastDateBloodPressureMesured;
+    public void setDateLastBloodPressureMesured(LocalDate lastDateBloodPressureMesured) {
+        this.dateLastBloodPressureMesured = lastDateBloodPressureMesured;
     }
 
     public boolean isBloodPressureTreatement() {
@@ -359,8 +372,6 @@ public class Patient extends AbstractAuditingEntity {
         this.stroke = stroke;
     }
 
-   
-
     public Integer getHeight() {
         return height;
     }
@@ -385,7 +396,6 @@ public class Patient extends AbstractAuditingEntity {
         this.drinkAlcohol = drinkAlcohol;
     }
 
-   
     public Chw getChw() {
         return chw;
     }
@@ -394,12 +404,20 @@ public class Patient extends AbstractAuditingEntity {
         this.chw = chw;
     }
 
-    public String getLastDoctorVisit() {
-        return lastDoctorVisit;
+    public LocalDate getDateLastConsultation() {
+        return dateLastConsultation;
     }
 
-    public void setLastDoctorVisit(String lastDoctorVisit) {
-        this.lastDoctorVisit = lastDoctorVisit;
+    public void setDateLastConsultation(LocalDate dateLastConsultation) {
+        this.dateLastConsultation = dateLastConsultation;
+    }
+
+    public LocalDate getDateLastDefineTarget() {
+        return dateLastDefineTarget;
+    }
+
+    public void setDateLastDefineTarget(LocalDate dateLastDefineTarget) {
+        this.dateLastDefineTarget = dateLastDefineTarget;
     }
 
     public String getFrequencyDrinkAlcohol() {
@@ -418,23 +436,37 @@ public class Patient extends AbstractAuditingEntity {
         this.frequencySmokeCigarettes = frequencySmokeCigarettes;
     }
 
-    public LocalDate getDatePremierBilan() {
-        return datePremierBilan;
+    public LocalDate getDateNextConsultation() {
+        return dateNextConsultation;
     }
 
-    public void setDatePremierBilan(LocalDate datePremierBilan) {
-        this.datePremierBilan = datePremierBilan;
+    public void setDateNextConsultation(LocalDate dateNextConsultation) {
+        this.dateNextConsultation = dateNextConsultation;
     }
 
-    public LocalDate getDateDernierBilan() {
-        return dateDernierBilan;
+    public LocalDate getDateFirstBilan() {
+        return dateFirstBilan;
     }
 
-    public void setDateDernierBilan(LocalDate dateDernierBilan) {
-        this.dateDernierBilan = dateDernierBilan;
+    public void setDateFirstBilan(LocalDate dateFirstBilan) {
+        this.dateFirstBilan = dateFirstBilan;
     }
 
-  
+    public LocalDate getDateLastBilan() {
+        return dateLastBilan;
+    }
+
+    public void setDateLastBilan(LocalDate dateLastBilan) {
+        this.dateLastBilan = dateLastBilan;
+    }
+
+    public boolean isBilanChecked() {
+        return bilanChecked;
+    }
+
+    public void setBilanChecked(boolean bilanChecked) {
+        this.bilanChecked = bilanChecked;
+    }
 
     public Education getEducation() {
         return education;
@@ -468,12 +500,20 @@ public class Patient extends AbstractAuditingEntity {
         this.diagnosticPrescriptionMedicale = diagnosticPrescriptionMedicale;
     }
 
-    public LocalDate getProchaineVisiteConsultation() {
-        return prochaineVisiteConsultation;
+    public boolean isDefineTarget() {
+        return defineTarget;
     }
 
-    public void setProchaineVisiteConsultation(LocalDate prochaineVisiteConsultation) {
-        this.prochaineVisiteConsultation = prochaineVisiteConsultation;
+    public void setDefineTarget(boolean defineTarget) {
+        this.defineTarget = defineTarget;
+    }
+
+    public String getLastDoctorVisit() {
+        return lastDoctorVisit;
+    }
+
+    public void setLastDoctorVisit(String lastDoctorVisit) {
+        this.lastDoctorVisit = lastDoctorVisit;
     }
 
 }

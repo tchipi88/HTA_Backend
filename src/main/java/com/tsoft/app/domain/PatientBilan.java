@@ -29,7 +29,7 @@ public class PatientBilan extends AbstractAuditingEntity {
     private Patient patient;
 
     @NotNull
-    private LocalDate dateBilan;
+    private LocalDate dateBilan = LocalDate.now();
 
     private String lifestyleQuestion1;
     private boolean lifestyleQuestion2;

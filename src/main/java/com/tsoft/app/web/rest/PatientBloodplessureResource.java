@@ -4,22 +4,15 @@ import com.codahale.metrics.annotation.Timed;
 import com.tsoft.app.domain.Patient;
 import com.tsoft.app.domain.PatientBloodplessure;
 import com.tsoft.app.repository.PatientBloodplessureRepository;
-import com.tsoft.app.repository.PatientRepository;
+import com.tsoft.app.service.PatientService;
 import com.tsoft.app.web.rest.util.HeaderUtil;
-import com.tsoft.app.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-import io.swagger.annotations.ApiParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +30,12 @@ public class PatientBloodplessureResource {
     private static final String ENTITY_NAME = "patientBloodplessure";
 
     private final PatientBloodplessureRepository patientBloodplessureRepository;
-    private final PatientRepository patientRepository;
 
-    public PatientBloodplessureResource(PatientBloodplessureRepository patientBloodplessureRepository,
-            PatientRepository patientRepository) {
+    private final PatientService patientService;
+
+    public PatientBloodplessureResource(PatientBloodplessureRepository patientBloodplessureRepository, PatientService patientService) {
         this.patientBloodplessureRepository = patientBloodplessureRepository;
-        this.patientRepository = patientRepository;
+        this.patientService = patientService;
     }
 
     /**
@@ -66,8 +59,12 @@ public class PatientBloodplessureResource {
         patient.setPaDiastolique(patientBloodplessure.getPaDiastolique());
         patient.setPaSystolique(patientBloodplessure.getPaSystolique());
         patient.setWeight(patientBloodplessure.getWeight());
+        patient.setBloodPressureMesured(true);
+        patient.setDateLastBloodPressureMesured(LocalDate.now());
 
-        patientRepository.save(patient);
+        patient = patientService.setRecommandation(patient);
+
+        patientService.updatePatient(patient);
 
         PatientBloodplessure result = patientBloodplessureRepository.save(patientBloodplessure);
         return ResponseEntity.created(new URI("/api/patient-bloodplessures/" + result.getId()))
@@ -80,34 +77,30 @@ public class PatientBloodplessureResource {
      *
      * @param fromDate
      * @param toDate
-     * @param pageable
-     * @return the ResponseEntity with status 200 (OK) and the list of patientBloodplessures in body
+     * @param patientId
+     * @return the ResponseEntity with status 200 (OK) and the list of
+     * patientBloodplessures in body
      */
-    @GetMapping(path = "/patient-bloodplessures", params = {"fromDate", "toDate"})
+    @GetMapping(path = "/patient-bloodplessures/{patientId}", params = {"fromDate", "toDate"})
     @Timed
     public ResponseEntity<List<PatientBloodplessure>> getAllPatientBloodplessuresByDate(
-            @RequestParam(value = "fromDate") LocalDate fromDate,
-            @RequestParam(value = "toDate") LocalDate toDate,
-            @ApiParam Pageable pageable) {
+            @RequestParam(value = "fromDate") LocalDate fromDate, @RequestParam(value = "toDate") LocalDate toDate,
+            @PathVariable Long patientId) {
         log.debug("REST request to get all PatientBloodplessures");
-        Page<PatientBloodplessure> page = patientBloodplessureRepository.findAllByDateReleveBetweenOrderByDateReleveAsc(fromDate, toDate, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/patient-bloodplessures");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        List<PatientBloodplessure> page = patientBloodplessureRepository
+                .findAllByPatientIdAndDateReleveBetweenOrderByDateReleveAsc(patientId, fromDate, toDate.plusDays(1));
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    /**
-     * GET /patient-bloodplessures/:id : get the "id" patientBloodplessure.
-     *
-     * @param id the id of the patientBloodplessure to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the
-     * patientBloodplessure, or with status 404 (Not Found)
-     */
-    @GetMapping("/patient-bloodplessures/{id}")
+    @GetMapping(path = "/patient-bloodplessures/{patientId}")
     @Timed
-    public ResponseEntity<PatientBloodplessure> getPatientBloodplessure(@PathVariable Long id) {
-        log.debug("REST request to get PatientBloodplessure : {}", id);
-        PatientBloodplessure patientBloodplessure = patientBloodplessureRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(patientBloodplessure));
+    public ResponseEntity<List<PatientBloodplessure>> getAllPatientBloodplessuresByDate(@PathVariable Long patientId) {
+        log.debug("REST request to get all PatientBloodplessures");
+        LocalDate fromDate = LocalDate.now().minusMonths(3);
+        LocalDate toDate = LocalDate.now();
+        List<PatientBloodplessure> page = patientBloodplessureRepository
+                .findAllByPatientIdAndDateReleveBetweenOrderByDateReleveAsc(patientId, fromDate, toDate);
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     /**

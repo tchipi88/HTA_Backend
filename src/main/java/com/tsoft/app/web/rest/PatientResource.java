@@ -2,29 +2,27 @@ package com.tsoft.app.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.tsoft.app.domain.Patient;
-import com.tsoft.app.domain.enumeration.Profil;
-
 import com.tsoft.app.repository.PatientRepository;
 import com.tsoft.app.repository.search.PatientSearchRepository;
-import com.tsoft.app.security.SecurityUtils;
 import com.tsoft.app.service.PatientService;
 import com.tsoft.app.web.rest.util.HeaderUtil;
+import com.tsoft.app.web.rest.util.PaginationUtil;
+import com.tsoft.app.web.rest.vm.Dashboard;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.Optional;
-
 import static org.elasticsearch.index.query.QueryBuilders.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * REST controller for managing Patient.
@@ -38,14 +36,13 @@ public class PatientResource {
     private static final String ENTITY_NAME = "patient";
 
     private final PatientRepository patientRepository;
+
     private final PatientService patientService;
 
     private final PatientSearchRepository patientSearchRepository;
 
-    public PatientResource(PatientRepository patientRepository,
-            PatientService patientService,
-            PatientSearchRepository patientSearchRepository
-    ) {
+    public PatientResource(PatientRepository patientRepository, PatientService patientService,
+            PatientSearchRepository patientSearchRepository) {
         this.patientRepository = patientRepository;
         this.patientSearchRepository = patientSearchRepository;
         this.patientService = patientService;
@@ -62,17 +59,17 @@ public class PatientResource {
      */
     @PostMapping("/patients")
     @Timed
-    public ResponseEntity<Patient> createPatient(@Valid @RequestBody Patient patient) throws Exception {
+    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) throws Exception {
         log.debug("REST request to save Patient : {}", patient);
         if (patient.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new patient cannot already have an ID")).body(null);
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new patient cannot already have an ID")).body(null);
         }
 
         Patient result = patientService.createPatient(patient);
         patientSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/patients/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-                .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
@@ -86,43 +83,31 @@ public class PatientResource {
      */
     @PutMapping("/patients")
     @Timed
-    public ResponseEntity<Patient> updatePatient(@Valid @RequestBody Patient patient) throws Exception {
+    public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient) throws Exception {
         log.debug("REST request to update Patient : {}", patient);
         if (patient.getId() == null) {
             return createPatient(patient);
         }
         Patient result = patientService.updatePatient(patient);
         patientSearchRepository.save(result);
-        return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, patient.getId().toString()))
-                .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, patient.getId().toString())).body(result);
     }
 
     /**
      * GET /patients : get all the patients.
      *
+     * @param query
+     * @param filter
      * @param pageable
      * @return the ResponseEntity with status 200 (OK) and the list of patients
      * in body
      */
     @GetMapping("/patients")
     @Timed
-    public ResponseEntity<Page<Patient>> getAllPatients(@ApiParam Pageable pageable) {
-        log.debug("REST request to get all Patients");
-        Page<Patient> page = null;
-        if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
-            page = patientRepository.findAll(pageable);
-        }
-        if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_CHW.name())) {
-            page = patientRepository.findAllByChw(pageable);
-        }
-        if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_MEDECIN.name())) {
-            page = patientRepository.findAllByMEdecin(pageable);
-        }
-        // TODO remove just for test
-        page = patientRepository.findAll(pageable);
-        //HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/patients");
-        return new ResponseEntity<>(page, HttpStatus.OK);
+    public ResponseEntity<Page<Patient>> getAllPatients(@RequestParam(name = "query", required = false) String query,
+            @ApiParam Pageable pageable) {
+        log.debug("REST request to get all Patients with query  {} and fliter {}", query);
+        return new ResponseEntity<>(patientService.getPatients(query, pageable), HttpStatus.OK);
     }
 
     /**
@@ -162,13 +147,30 @@ public class PatientResource {
      * @param query the query of the patient search
      * @return the result of the search
      */
-    @GetMapping("/_search/patients")
+    @GetMapping("/patientss")
     @Timed
     public ResponseEntity<Page<Patient>> searchPatients(@RequestParam String query, @ApiParam Pageable pageable) {
         log.debug("REST request to search Patients for query {}", query);
         Page<Patient> page = patientSearchRepository.search(queryStringQuery(query), pageable);
-        // HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/patients");
-        return new ResponseEntity<>(page, HttpStatus.OK);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/patientss");
+        return new ResponseEntity<>(page, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/patients-dashboard", params = {"fromDate", "toDate"})
+    @Timed
+    public ResponseEntity<Dashboard> getDashboard(@RequestParam(value = "fromDate") LocalDate fromDate,
+            @RequestParam(value = "toDate") LocalDate toDate) {
+        Dashboard dashboard = patientService.getDashboard(fromDate, toDate);
+        return new ResponseEntity<>(dashboard, HttpStatus.OK);
+
+    }
+
+    @GetMapping(path = "/patients-dashboardM")
+    @Timed
+    public ResponseEntity<Dashboard> getDashboardMedecin() {
+        Dashboard dashboard = patientService.getDashboardMedecin();
+        return new ResponseEntity<>(dashboard, HttpStatus.OK);
+
     }
 
 }

@@ -4,7 +4,6 @@ import com.tsoft.app.domain.enumeration.Profil;
 import com.tsoft.app.service.dto.UserDTO;
 import javax.validation.constraints.Size;
 
-
 /**
  * View Model extending the UserDTO, which is meant to be used in the user
  * management UI.
@@ -26,8 +25,7 @@ public class ManagedUserVM extends UserDTO {
             String email, boolean activated,
             Profil profil, String telephone) {
 
-        super(id, firstName, lastName, email, activated,
-                profil, telephone);
+        super(id, firstName, lastName, email, activated, profil, telephone, null);
 
         this.password = password;
     }

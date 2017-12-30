@@ -77,7 +77,7 @@ public class PatientConsultation extends AbstractAuditingEntity {
     private boolean prescriptionWithDrug;
 
     @Column
-    private LocalDate dateNextVisite;
+    private LocalDate dateNextConsultation;
 
     public Integer getPaDiastolique() {
         return paDiastolique;
@@ -191,12 +191,12 @@ public class PatientConsultation extends AbstractAuditingEntity {
         this.prescriptionWithDrug = prescriptionWithDrug;
     }
 
-    public LocalDate getDateNextVisite() {
-        return dateNextVisite;
+    public LocalDate getDateNextConsultation() {
+        return dateNextConsultation;
     }
 
-    public void setDateNextVisite(LocalDate dateNextVisite) {
-        this.dateNextVisite = dateNextVisite;
+    public void setDateNextConsultation(LocalDate dateNextConsultation) {
+        this.dateNextConsultation = dateNextConsultation;
     }
 
     public Long getId() {

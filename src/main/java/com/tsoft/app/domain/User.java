@@ -1,6 +1,7 @@
 package com.tsoft.app.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tsoft.app.domain.enumeration.Gender;
 import com.tsoft.app.domain.enumeration.Profil;
 import java.time.Instant;
 import javax.persistence.*;
@@ -27,6 +28,8 @@ public class User extends AbstractAuditingEntity {
     @NotNull
     @Column(unique = true, nullable = false)
     private String email;
+
+    private Gender gender;
     @NotNull
     @Column
     private String nom;
@@ -207,6 +210,14 @@ public class User extends AbstractAuditingEntity {
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
 }

@@ -2,10 +2,9 @@ package com.tsoft.app.service.dto;
 
 import com.tsoft.app.domain.User;
 import com.tsoft.app.domain.enumeration.Profil;
-
-import org.hibernate.validator.constraints.Email;
-
+import java.time.Instant;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.Email;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -30,19 +29,19 @@ public class UserDTO {
 
     private Profil profil;
 
+    private Instant resetDate;
+
     public UserDTO() {
         // Empty constructor needed for MapStruct.
     }
 
     public UserDTO(User user) {
         this(user.getId(), user.getPrenom(), user.getNom(), user.getEmail(),
-                user.getActivated(),
-                user.getProfil(), user.getTelephone());
+                user.getActivated(), user.getProfil(), user.getTelephone(), user.getResetDate());
     }
 
     public UserDTO(Long id, String firstName, String lastName, String email,
-            boolean activated,
-            Profil profil, String telephone) {
+            boolean activated, Profil profil, String telephone, Instant resetDate) {
 
         this.id = id;
         this.prenom = firstName;
@@ -53,6 +52,7 @@ public class UserDTO {
         this.profil = profil;
         this.telephone = telephone;
 
+        this.resetDate = resetDate;
     }
 
     public Long getId() {
@@ -120,7 +120,13 @@ public class UserDTO {
     public void setProfil(Profil profil) {
         this.profil = profil;
     }
-    
-    
+
+    public Instant getResetDate() {
+        return resetDate;
+    }
+
+    public void setResetDate(Instant resetDate) {
+        this.resetDate = resetDate;
+    }
 
 }

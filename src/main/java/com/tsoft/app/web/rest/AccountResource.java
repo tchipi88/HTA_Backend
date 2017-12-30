@@ -4,13 +4,15 @@ import com.codahale.metrics.annotation.Timed;
 import com.tsoft.app.domain.User;
 import com.tsoft.app.repository.UserRepository;
 import com.tsoft.app.security.SecurityUtils;
-import com.tsoft.app.service.MailService;
 import com.tsoft.app.service.UserService;
 import com.tsoft.app.service.dto.UserDTO;
+import com.tsoft.app.service.notification.MailService;
 import com.tsoft.app.web.rest.util.HeaderUtil;
 import com.tsoft.app.web.rest.vm.KeyAndPasswordVM;
 import com.tsoft.app.web.rest.vm.ManagedUserVM;
-
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.*;
 
 /**
  * REST controller for managing the current user's account.
@@ -60,6 +56,17 @@ public class AccountResource {
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
+    }
+
+    @GetMapping("/firebase")
+    @Timed
+    public void setfirebaseToken(@RequestParam("token") String token) {
+        Optional<User> existingUser = userRepository.findOneByEmail(SecurityUtils.getCurrentUserLogin());
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+            user.setFirebaseToken(token);
+            userRepository.save(user);
+        }
     }
 
     /**
@@ -107,12 +114,11 @@ public class AccountResource {
      * @return the ResponseEntity with status 200 (OK), or status 400 (Bad
      * Request) if the new password is not strong enough
      */
-    @PostMapping(path = "/account/change_password",
-            produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(path = "/account/change_password")
     @Timed
-    public ResponseEntity changePassword(@RequestBody String password) {
+    public ResponseEntity changePassword(@RequestParam String password) {
         if (!checkPasswordLength(password)) {
-            return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -126,15 +132,14 @@ public class AccountResource {
      * @return the ResponseEntity with status 200 (OK) if the e-mail was sent,
      * or status 400 (Bad Request) if the e-mail address is not registered
      */
-    @PostMapping(path = "/account/reset_password/init",
-            produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(path = "/account/reset_password/init")
     @Timed
-    public ResponseEntity requestPasswordReset(@RequestBody String mail) {
+    public ResponseEntity requestPasswordReset(@RequestParam String mail) {
         return userService.requestPasswordReset(mail)
                 .map(user -> {
                     mailService.sendPasswordResetMail(user);
-                    return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
-                }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }).orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     /**
@@ -149,13 +154,12 @@ public class AccountResource {
     @PostMapping(path = "/account/reset_password/finish",
             produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
-    public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
+    public ResponseEntity finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
-            return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
-                .map(user -> new ResponseEntity<String>(HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+                .map(user -> new ResponseEntity<>(HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     private boolean checkPasswordLength(String password) {

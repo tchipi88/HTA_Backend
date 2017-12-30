@@ -86,12 +86,10 @@ public class OAuth2ServerConfiguration {
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .antMatchers("/api/authenticate").permitAll()
                     .antMatchers("/api/demo").permitAll()
-                    .antMatchers("/api/init").permitAll()
-                    .antMatchers("/api/register").permitAll()
-                    .antMatchers("/api/profile-info").permitAll().antMatchers("/api/**").permitAll()                    .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .antMatchers("/v2/api-docs/**").permitAll()
-                    .antMatchers("/swagger-resources/configuration/ui").permitAll()
-                    .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
+                    .antMatchers("/api/init").permitAll().antMatchers("/api/register").permitAll().antMatchers("/api/profile-info")
+                    .permitAll().antMatchers("/api/**").authenticated().antMatchers("/management/**")
+                    .hasAuthority(AuthoritiesConstants.ADMIN).antMatchers("/v2/api-docs/**").permitAll()
+                    .antMatchers("/swagger-resources/configuration/ui").permitAll()                    .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }
 
         @Override
