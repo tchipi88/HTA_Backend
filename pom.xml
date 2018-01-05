@@ -406,7 +406,7 @@
         <defaultGoal>spring-boot:run</defaultGoal>
         <pluginManagement>
             <plugins>
-              
+
             </plugins>
         </pluginManagement>
         <plugins>
@@ -680,7 +680,7 @@
             <id>prod</id>
             <build>
                 <plugins>
-                  
+
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <configuration>

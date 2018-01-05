@@ -23,7 +23,7 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/hta?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
-        password: root
+        password: Jojimab@01
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -79,7 +79,7 @@ liquibase:
 #        keyAlias: TKBR_
 # ===================================================================
 server:
-    port: 8080
+    port: 8088
     compression:
         enabled: true
         mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
