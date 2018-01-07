@@ -141,3 +141,4 @@ Desktop.ini
 .eslintcache
 .mvn/*
 .bowerrc
+/velibFormatter_v0.xml

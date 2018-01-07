@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this license header, choose License Headers in Project Properties. To change this
+ * template file, choose Tools | Templates and open the template in the editor.
  */
 package com.tsoft.app.repository;
 
@@ -26,7 +25,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("select p from Patient p where p.chw.email= ?#{ principal?.username }")
     public Page<Patient> findAllByChw(Pageable pageable);
 
-    @Query("select p from Patient p where  p.cvdRisk='HIGH'  and p.chw.email= ?#{ principal?.username }")
+    @Query("select p from Patient p where  p.cvdRisk!='LOW'  and p.chw.email= ?#{ principal?.username }")
     public Page<Patient> findAllByChwHighRisk(Pageable pageable);
 
     @Query("select p from Patient p where p.chw.medecin.email= ?#{ principal?.username }")
@@ -35,7 +34,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("select count(p) from Patient p where p.chw.medecin.email= ?#{ principal?.username }")
     public Long countByMEdecin();
 
-    @Query("select p from Patient p where p.cvdRisk='HIGH'  and  p.chw.medecin.email= ?#{ principal?.username }")
+    @Query("select p from Patient p where p.cvdRisk!='LOW'  and  p.chw.medecin.email= ?#{ principal?.username }")
     public Page<Patient> findAllByMEdecinHighRisk(Pageable pageable);
 
     @Query("select count(p) from Patient p where p.cvdRisk='HIGH'  and  p.chw.medecin.email= ?#{ principal?.username }")
@@ -62,6 +61,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     public Page<Patient> findAllByBloodPressureTreatement(boolean b, Pageable pageable);
 
+    @Query("select p from Patient p where p.cvdRisk!='LOW'")
     public Page<Patient> findAllByCvdRisk(Risque risque, Pageable pageable);
 
     public Page<Patient> findAllByChwEmailOrderByCvdRisk(String currentUserLogin, Pageable pageable);
