@@ -25,8 +25,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("select p from Patient p where p.chw.email= ?#{ principal?.username }")
     public Page<Patient> findAllByChw(Pageable pageable);
 
-    @Query("select p from Patient p where  p.cvdRisk!='LOW'  and p.chw.email= ?#{ principal?.username }")
-    public Page<Patient> findAllByChwHighRisk(Pageable pageable);
 
     @Query("select p from Patient p where p.chw.medecin.email= ?#{ principal?.username }")
     public Page<Patient> findAllByMEdecin(Pageable pageable);
@@ -34,11 +32,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("select count(p) from Patient p where p.chw.medecin.email= ?#{ principal?.username }")
     public Long countByMEdecin();
 
-    @Query("select p from Patient p where p.cvdRisk!='LOW'  and  p.chw.medecin.email= ?#{ principal?.username }")
-    public Page<Patient> findAllByMEdecinHighRisk(Pageable pageable);
-
-    @Query("select count(p) from Patient p where p.cvdRisk='HIGH'  and  p.chw.medecin.email= ?#{ principal?.username }")
-    public Long countByMEdecinHighRisk();
 
     public Long countByCreatedDateBetween(ZonedDateTime fromDate, ZonedDateTime toDate);
 
@@ -61,8 +54,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     public Page<Patient> findAllByBloodPressureTreatement(boolean b, Pageable pageable);
 
-    @Query("select p from Patient p where p.cvdRisk!='LOW'")
-    public Page<Patient> findAllByCvdRisk(Risque risque, Pageable pageable);
 
     public Page<Patient> findAllByChwEmailOrderByCvdRisk(String currentUserLogin, Pageable pageable);
 
@@ -73,5 +64,29 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     public Page<Patient> findAllByChwEmail(String currentUserLogin, Pageable pageable);
 
     public Page<Patient> findAllByChwMedecinEmail(String currentUserLogin, Pageable pageable);
+
+    //filtre  cvdRisk
+    @Query("select p from Patient p where p.cvdRisk!='LOW'")
+    public Page<Patient> findAllByHighRisk(Pageable pageable);
+
+    @Query("select p from Patient p where  p.cvdRisk!='LOW'  and p.chw.email= ?#{ principal?.username }")
+    public Page<Patient> findAllByChwHighRisk(Pageable pageable);
+
+    @Query("select p from Patient p where p.cvdRisk!='LOW'  and  p.chw.medecin.email= ?#{ principal?.username }")
+    public Page<Patient> findAllByMedecinHighRisk(Pageable pageable);
+
+    @Query("select count(p) from Patient p where p.cvdRisk='HIGH'  and  p.chw.medecin.email= ?#{ principal?.username }")
+    public Long countByMEdecinHighRisk();
+
+    //filtre  Recommandation
+
+    @Query("select count(p) from Patient p where p.recommandationVisitDoctor!='BP_TBP'  and  p.chw.medecin.email= ?#{ principal?.username }")
+    public Page<Patient> findAllByMedecinRecommandationVisitDoctor(Pageable pageable);
+
+    @Query("select p from Patient p where  p.recommandationVisitDoctor!='BP_TBP'  and p.chw.email= ?#{ principal?.username }")
+    public Page<Patient> findAllByChwRecommandationVisitDoctor(Pageable pageable);
+
+    @Query("select p from Patient p where p.recommandationVisitDoctor!='BP_TBP'")
+    public Page<Patient> findAllByRecommandationVisitDoctor(Pageable pageable);
 
 }

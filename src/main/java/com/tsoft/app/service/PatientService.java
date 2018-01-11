@@ -718,7 +718,7 @@ public class PatientService {
     }
 
     public Page<Patient> getPatients(String query, Pageable pageableRequest) {
-        Sort sort = new Sort(new Sort.Order(Direction.ASC, "cvdRisk"));
+        Sort sort = new Sort(new Sort.Order(Direction.DESC, "recommandationVisitDoctor"));
         Pageable pageable = new PageRequest(pageableRequest.getPageNumber(), pageableRequest.getPageSize(), sort);
         if (StringUtils.isBlank(query)) {
             if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
@@ -732,15 +732,26 @@ public class PatientService {
             }
 
         } else {
+            if (query.equalsIgnoreCase("recommandation")) {
+                if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
+                    return patientRepository.findAllByRecommandationVisitDoctor(pageable);
+                }
+                if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_CHW.name())) {
+                    return patientRepository.findAllByChwRecommandationVisitDoctor(pageable);
+                }
+                if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_MEDECIN.name())) {
+                    return patientRepository.findAllByMedecinRecommandationVisitDoctor(pageable);
+                }
+            }
             if (query.equalsIgnoreCase("highRisk")) {
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
-                    return patientRepository.findAllByCvdRisk(Risque.HIGH, pageable);
+                    return patientRepository.findAllByHighRisk(pageable);
                 }
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_CHW.name())) {
                     return patientRepository.findAllByChwHighRisk(pageable);
                 }
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_MEDECIN.name())) {
-                    return patientRepository.findAllByMEdecinHighRisk(pageable);
+                    return patientRepository.findAllByMedecinHighRisk(pageable);
                 }
             }
             if (query.equalsIgnoreCase("isTreatement")) {
