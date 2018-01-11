@@ -109,7 +109,7 @@ public class Patient extends AbstractAuditingEntity {
     private boolean recommandationlifesytleAdvice;
     @Enumerated
     private RecommandationFrequenceProgramSuvi recommandationFrequenceProgramSuvi;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private RecommandationVisitDoctor recommandationVisitDoctor;
 
     private LocalDate dateLastConsultation;
