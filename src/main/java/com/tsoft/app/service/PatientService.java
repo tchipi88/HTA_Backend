@@ -718,7 +718,7 @@ public class PatientService {
     }
 
     public Page<Patient> getPatients(String query, Pageable pageableRequest) {
-        Sort sort = new Sort(new Sort.Order(Direction.ASC, "recommandationVisitDoctor"));
+        Sort sort = new Sort(new Sort.Order(Direction.DESC, "recommandationVisitDoctor"));
         Pageable pageable = new PageRequest(pageableRequest.getPageNumber(), pageableRequest.getPageSize(), sort);
         if (StringUtils.isBlank(query)) {
             if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
