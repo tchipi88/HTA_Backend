@@ -66,6 +66,8 @@ public class PatientConsultationResource {
         patient.setDiagnosticHypertension(patientConsultation.isDiagnosticHypertension());
         patient.setDateLastConsultation(LocalDate.now());
         patient.setDateLastBloodPressureMesured(LocalDate.now());
+        patient.setPaDiastolique(patientConsultation.getPaDiastolique());
+        patient.setPaSystolique(patientConsultation.getPaSystolique());
         patientService.updatePatient(patient);
 
         PatientConsultation result = patientConsultationRepository.save(patientConsultation);
