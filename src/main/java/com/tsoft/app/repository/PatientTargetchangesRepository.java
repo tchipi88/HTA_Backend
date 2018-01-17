@@ -22,4 +22,6 @@ public interface PatientTargetchangesRepository extends JpaRepository<PatientTar
 
     public List<PatientTargetchanges> findByPatientIdOrderByDateTargetDesc(Long patientId);
 
+    public PatientTargetchanges findFirstByPatientIdOrderByDateTargetDesc(Long patientId);
+
 }

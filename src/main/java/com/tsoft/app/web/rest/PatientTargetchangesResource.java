@@ -10,7 +10,6 @@ import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -82,8 +81,8 @@ public class PatientTargetchangesResource {
     @Timed
     public ResponseEntity<PatientTargetchanges> getPatientTargetchanges(@PathVariable Long patientId) {
         log.debug("REST request to get PatientTargetchanges : {}", patientId);
-        List<PatientTargetchanges> patientTargetchangess = patientTargetchangesRepository.findByPatientIdOrderByDateTargetDesc(patientId);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(patientTargetchangess.get(0)));
+        PatientTargetchanges patientTargetchanges = patientTargetchangesRepository.findFirstByPatientIdOrderByDateTargetDesc(patientId);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(patientTargetchanges));
     }
 
     /**

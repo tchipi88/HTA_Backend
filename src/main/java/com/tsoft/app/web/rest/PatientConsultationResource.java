@@ -117,15 +117,15 @@ public class PatientConsultationResource {
     /**
      * GET /patient-consultations/:id : get the "id" patientConsultation.
      *
-     * @param id the id of the patientConsultation to retrieve
+     * @param patientId
      * @return the ResponseEntity with status 200 (OK) and with body the
      * patientConsultation, or with status 404 (Not Found)
      */
-    @GetMapping("/patient-consultations/{id}")
+    @GetMapping("/patient-consultations/{patientId}")
     @Timed
-    public ResponseEntity<PatientConsultation> getPatientConsultation(@PathVariable Long id) {
-        log.debug("REST request to get PatientConsultation : {}", id);
-        PatientConsultation patientConsultation = patientConsultationRepository.findOne(id);
+    public ResponseEntity<PatientConsultation> getPatientConsultation(@PathVariable Long patientId) {
+        log.debug("REST request to get PatientConsultation : {}", patientId);
+        PatientConsultation patientConsultation = patientConsultationRepository.findFirstByPatientIdOrderByDateConsultationDesc(patientId);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(patientConsultation));
     }
 

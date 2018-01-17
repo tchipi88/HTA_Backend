@@ -17,7 +17,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface PatientConsultationRepository extends JpaRepository<PatientConsultation, Long> {
 
-    
+    public PatientConsultation findFirstByPatientIdOrderByDateConsultationDesc(Long patientId);
+
 
 }
 
