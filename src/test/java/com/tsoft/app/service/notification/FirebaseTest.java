@@ -32,7 +32,7 @@ public class FirebaseTest {
 
     @Test
     public void sendPushNotificationWithToken() throws Exception {
-        //firebaseService.sendPushNotification(user, "Message FCM GODD");
+        // firebaseService.sendPushNotification(user, "Message FCM GODD");
     }
 
 }

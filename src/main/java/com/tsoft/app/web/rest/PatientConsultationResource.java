@@ -3,6 +3,7 @@ package com.tsoft.app.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.tsoft.app.domain.Patient;
 import com.tsoft.app.domain.PatientConsultation;
+import com.tsoft.app.repository.PatientBloodplessureRepository;
 import com.tsoft.app.repository.PatientConsultationRepository;
 import com.tsoft.app.service.PatientService;
 import com.tsoft.app.web.rest.util.HeaderUtil;
@@ -37,11 +38,14 @@ public class PatientConsultationResource {
 
     private final PatientConsultationRepository patientConsultationRepository;
 
+    private final PatientBloodplessureRepository patientBloodplessureRepository;
+
     private final PatientService patientService;
 
-    public PatientConsultationResource(PatientConsultationRepository patientConsultationRepository, PatientService patientService) {
+    public PatientConsultationResource(PatientConsultationRepository patientConsultationRepository, PatientService patientService, PatientBloodplessureRepository patientBloodplessureRepository) {
         this.patientConsultationRepository = patientConsultationRepository;
         this.patientService = patientService;
+        this.patientBloodplessureRepository = patientBloodplessureRepository;
     }
 
     /**
@@ -65,37 +69,15 @@ public class PatientConsultationResource {
         patient.setDateNextConsultation(patientConsultation.getDateNextConsultation());
         patient.setDiagnosticHypertension(patientConsultation.isDiagnosticHypertension());
         patient.setDateLastConsultation(LocalDate.now());
-        patient.setDateLastBloodPressureMesured(LocalDate.now());
+        patient.setDateLastBloodplessureMesured(LocalDate.now());
         patient.setPaDiastolique(patientConsultation.getPaDiastolique());
         patient.setPaSystolique(patientConsultation.getPaSystolique());
+        patient.setBloodplessureTomesure(!(patientConsultation.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatient(patientConsultation.getPatient()) > 2));
         patientService.updatePatient(patient);
 
         PatientConsultation result = patientConsultationRepository.save(patientConsultation);
         return ResponseEntity.created(new URI("/api/patient-consultations/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-                .body(result);
-    }
-
-    /**
-     * PUT /patient-consultations : Updates an existing patientConsultation.
-     *
-     * @param patientConsultation the patientConsultation to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated
-     * patientConsultation, or with status 400 (Bad Request) if the
-     * patientConsultation is not valid, or with status 500 (Internal Server
-     * Error) if the patientConsultation couldnt be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
-    @PutMapping("/patient-consultations")
-    @Timed
-    public ResponseEntity<PatientConsultation> updatePatientConsultation(@Valid @RequestBody PatientConsultation patientConsultation) throws Exception {
-        log.debug("REST request to update PatientConsultation : {}", patientConsultation);
-        if (patientConsultation.getId() == null) {
-            return createPatientConsultation(patientConsultation);
-        }
-        PatientConsultation result = patientConsultationRepository.save(patientConsultation);
-        return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, patientConsultation.getId().toString()))
                 .body(result);
     }
 
@@ -127,20 +109,6 @@ public class PatientConsultationResource {
         log.debug("REST request to get PatientConsultation : {}", patientId);
         PatientConsultation patientConsultation = patientConsultationRepository.findFirstByPatientIdOrderByDateConsultationDesc(patientId);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(patientConsultation));
-    }
-
-    /**
-     * DELETE /patient-consultations/:id : delete the "id" patientConsultation.
-     *
-     * @param id the id of the patientConsultation to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
-    @DeleteMapping("/patient-consultations/{id}")
-    @Timed
-    public ResponseEntity<Void> deletePatientConsultation(@PathVariable Long id) {
-        log.debug("REST request to delete PatientConsultation : {}", id);
-        patientConsultationRepository.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
 }

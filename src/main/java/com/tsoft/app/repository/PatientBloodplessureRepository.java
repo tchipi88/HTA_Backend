@@ -5,6 +5,7 @@
  */
 package com.tsoft.app.repository;
 
+import com.tsoft.app.domain.Patient;
 import com.tsoft.app.domain.PatientBloodplessure;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,5 +21,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PatientBloodplessureRepository extends JpaRepository<PatientBloodplessure, Long> {
 
     public List<PatientBloodplessure> findAllByPatientIdAndDateReleveBetweenOrderByDateReleveAsc(Long patientId, LocalDate fromDate, LocalDate toDate);
+
+    public long countByPatient(Patient patient);
 
 }

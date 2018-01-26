@@ -62,10 +62,10 @@ public class PatientService {
     }
 
     public Patient updatePatient(Patient patient) throws Exception {
-        return patientRepository.save(patient);
+        return patientRepository.save(setRecommandation(patient));
     }
 
-    public Patient setRecommandation(Patient patient) {
+    private Patient setRecommandation(Patient patient) {
         assert patient != null;
 
         // determine Age of Patient
@@ -756,13 +756,25 @@ public class PatientService {
             }
             if (query.equalsIgnoreCase("isTreatement")) {
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
-                    return patientRepository.findAllByBloodPressureTreatement(true, pageable);
+                    return patientRepository.findAllByBloodplessureTreatment(true, pageable);
                 }
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_CHW.name())) {
                     return patientRepository.findAllByChwIsTreatement(pageable);
                 }
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_MEDECIN.name())) {
                     return patientRepository.findAllByMEdecinIsTreatement(pageable);
+                }
+            }
+
+            if (query.equalsIgnoreCase("bloodplessureTomesure")) {
+                if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
+                    return patientRepository.findAllByBloodplessureTomesure(true, pageable);
+                }
+                if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_CHW.name())) {
+                    return patientRepository.findAllByChwBloodplessureTomesure(pageable);
+                }
+                if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_MEDECIN.name())) {
+                    return patientRepository.findAllByMedecinBloodplessureTomesure(pageable);
                 }
             }
 

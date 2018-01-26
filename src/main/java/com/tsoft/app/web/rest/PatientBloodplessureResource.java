@@ -59,11 +59,9 @@ public class PatientBloodplessureResource {
         patient.setPaDiastolique(patientBloodplessure.getPaDiastolique());
         patient.setPaSystolique(patientBloodplessure.getPaSystolique());
         patient.setWeight(patientBloodplessure.getWeight());
-        patient.setBloodPressureMesured(true);
-        patient.setDateLastBloodPressureMesured(LocalDate.now());
-
-        patient = patientService.setRecommandation(patient);
-
+        patient.setBloodplessureMesured(true);
+        patient.setDateLastBloodplessureMesured(LocalDate.now());
+        patient.setBloodplessureTomesure(!(patientBloodplessure.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatient(patientBloodplessure.getPatient()) > 2));
         patientService.updatePatient(patient);
 
         PatientBloodplessure result = patientBloodplessureRepository.save(patientBloodplessure);
@@ -97,25 +95,10 @@ public class PatientBloodplessureResource {
     public ResponseEntity<List<PatientBloodplessure>> getAllPatientBloodplessuresByDate(@PathVariable Long patientId) {
         log.debug("REST request to get all PatientBloodplessures");
         LocalDate fromDate = LocalDate.now().minusMonths(3);
-        LocalDate toDate = LocalDate.now();
+        LocalDate toDate = LocalDate.now().plusDays(1);
         List<PatientBloodplessure> page = patientBloodplessureRepository
                 .findAllByPatientIdAndDateReleveBetweenOrderByDateReleveAsc(patientId, fromDate, toDate);
         return new ResponseEntity<>(page, HttpStatus.OK);
-    }
-
-    /**
-     * DELETE /patient-bloodplessures/:id : delete the "id"
-     * patientBloodplessure.
-     *
-     * @param id the id of the patientBloodplessure to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
-    @DeleteMapping("/patient-bloodplessures/{id}")
-    @Timed
-    public ResponseEntity<Void> deletePatientBloodplessure(@PathVariable Long id) {
-        log.debug("REST request to delete PatientBloodplessure : {}", id);
-        patientBloodplessureRepository.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
 }

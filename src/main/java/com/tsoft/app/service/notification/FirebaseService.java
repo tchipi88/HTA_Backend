@@ -78,7 +78,7 @@ public class FirebaseService {
     private ResponseEntity<String> sendPushNotification(JSONObject pushNotificationHttpV1ApiDto) throws Exception {
         LOGGER.debug("Start Send Push Notification  to  {} ", pushNotificationHttpV1ApiDto.getString("to"));
         String baseUri = "https://fcm.googleapis.com/v1/projects/ganeo-hta/messages:send";
-        HttpEntity httpEntity = new HttpEntity(pushNotificationHttpV1ApiDto.toString(), createHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity(pushNotificationHttpV1ApiDto.toString(), createHeaders());
         ResponseEntity<String> response = restTemplate.exchange(baseUri, HttpMethod.POST, httpEntity, String.class);
         LOGGER.debug("Start Send Push Notification  to  {} with content  with response {}", pushNotificationHttpV1ApiDto.getString("to"),
                 response.toString());
