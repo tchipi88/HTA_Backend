@@ -1,5 +1,5 @@
 # ===================================================================
-# Spring Boot configuration for the "prod" profile.
+# Spring Boot configuration for the "preprod" profile.
 #
 # This configuration overrides the application.yml file.
 #
@@ -64,7 +64,7 @@ spring:
         cache: true
 
 liquibase:
-    contexts: prod
+    contexts: preprod
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
