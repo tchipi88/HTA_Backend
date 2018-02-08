@@ -56,7 +56,7 @@ public class PatientTreatmentResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new patientTreatment cannot already have an ID")).body(null);
         }
         Patient patient = patientTreatment.getPatient();
-        patient.setMonitoringTreatement(true);
+        patient.setMonitoringTreatment(true);
         patientService.updatePatient(patient);
 
         PatientTreatment result = patientTreatmentRepository.save(patientTreatment);

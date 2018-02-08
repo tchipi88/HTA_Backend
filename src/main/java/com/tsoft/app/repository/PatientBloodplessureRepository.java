@@ -22,6 +22,8 @@ public interface PatientBloodplessureRepository extends JpaRepository<PatientBlo
 
     public List<PatientBloodplessure> findAllByPatientIdAndDateReleveBetweenOrderByDateReleveAsc(Long patientId, LocalDate fromDate, LocalDate toDate);
 
+
     public long countByPatient(Patient patient);
 
+    public long countByPatientAndDateReleveAfter(Patient patient,LocalDate dateReleve);
 }

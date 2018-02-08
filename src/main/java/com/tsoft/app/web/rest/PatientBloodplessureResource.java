@@ -61,7 +61,7 @@ public class PatientBloodplessureResource {
         patient.setWeight(patientBloodplessure.getWeight());
         patient.setBloodplessureMesured(true);
         patient.setDateLastBloodplessureMesured(LocalDate.now());
-        patient.setBloodplessureTomesure(!(patientBloodplessure.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatient(patientBloodplessure.getPatient()) > 2));
+        patient.setBloodplessureTomesure(!(patientBloodplessure.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatientAndDateReleveAfter(patientBloodplessure.getPatient(), LocalDate.now().minusMonths(2)) > 2));
         patientService.updatePatient(patient);
 
         PatientBloodplessure result = patientBloodplessureRepository.save(patientBloodplessure);

@@ -129,7 +129,7 @@ public class Patient extends AbstractAuditingEntity {
 
     private LocalDate dateLastDefineTarget;
 
-    private boolean monitoringTreatement;
+    private boolean monitoringTreatment;
 
     public Patient() {
     }
@@ -518,12 +518,12 @@ public class Patient extends AbstractAuditingEntity {
         this.lastDoctorVisit = lastDoctorVisit;
     }
 
-    public boolean isMonitoringTreatement() {
-        return monitoringTreatement;
+    public boolean isMonitoringTreatment() {
+        return monitoringTreatment;
     }
 
-    public void setMonitoringTreatement(boolean monitoringTreatement) {
-        this.monitoringTreatement = monitoringTreatement;
+    public void setMonitoringTreatment(boolean monitoringTreatment) {
+        this.monitoringTreatment = monitoringTreatment;
     }
 
     public boolean isBloodplessureTomesure() {
