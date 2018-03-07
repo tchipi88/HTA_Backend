@@ -3,7 +3,7 @@ package com.tsoft.app.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.tsoft.app.domain.Patient;
 import com.tsoft.app.domain.PatientConsultation;
-import com.tsoft.app.repository.PatientBloodplessureRepository;
+import com.tsoft.app.repository.PatientBloodpressureRepository;
 import com.tsoft.app.repository.PatientConsultationRepository;
 import com.tsoft.app.service.PatientService;
 import com.tsoft.app.web.rest.util.HeaderUtil;
@@ -38,11 +38,11 @@ public class PatientConsultationResource {
 
     private final PatientConsultationRepository patientConsultationRepository;
 
-    private final PatientBloodplessureRepository patientBloodplessureRepository;
+    private final PatientBloodpressureRepository patientBloodplessureRepository;
 
     private final PatientService patientService;
 
-    public PatientConsultationResource(PatientConsultationRepository patientConsultationRepository, PatientService patientService, PatientBloodplessureRepository patientBloodplessureRepository) {
+    public PatientConsultationResource(PatientConsultationRepository patientConsultationRepository, PatientService patientService, PatientBloodpressureRepository patientBloodplessureRepository) {
         this.patientConsultationRepository = patientConsultationRepository;
         this.patientService = patientService;
         this.patientBloodplessureRepository = patientBloodplessureRepository;
@@ -68,11 +68,11 @@ public class PatientConsultationResource {
         patient.setConsulte(true);
         patient.setDateNextConsultation(patientConsultation.getDateNextConsultation());
         patient.setDiagnosticHypertension(patientConsultation.isDiagnosticHypertension());
-        patient.setDateLastConsultation(LocalDate.now());
-        patient.setDateLastBloodplessureMesured(LocalDate.now());
+        patient.setDateLastConsultation(patientConsultation.getDateConsultation());
+        patient.setDateLastBloodpressureMesured(patientConsultation.getDateConsultation());
         patient.setPaDiastolique(patientConsultation.getPaDiastolique());
         patient.setPaSystolique(patientConsultation.getPaSystolique());
-        patient.setBloodplessureTomesure(!(patientConsultation.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatientAndDateReleveAfter(patientConsultation.getPatient(), LocalDate.now().minusMonths(2)) > 2));
+        patient.setBloodpressureTomesure(!(patientConsultation.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatientAndDateReleveAfter(patientConsultation.getPatient(), LocalDate.now().minusMonths(2)) > 2));
         patientService.updatePatient(patient);
 
         PatientConsultation result = patientConsultationRepository.save(patientConsultation);

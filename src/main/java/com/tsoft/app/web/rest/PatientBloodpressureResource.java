@@ -2,8 +2,8 @@ package com.tsoft.app.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.tsoft.app.domain.Patient;
-import com.tsoft.app.domain.PatientBloodplessure;
-import com.tsoft.app.repository.PatientBloodplessureRepository;
+import com.tsoft.app.domain.PatientBloodpressure;
+import com.tsoft.app.repository.PatientBloodpressureRepository;
 import com.tsoft.app.service.PatientService;
 import com.tsoft.app.web.rest.util.HeaderUtil;
 import java.net.URI;
@@ -19,21 +19,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * REST controller for managing PatientBloodplessure.
+ * REST controller for managing PatientBloodpressure.
  */
 @RestController
 @RequestMapping("/api")
-public class PatientBloodplessureResource {
+public class PatientBloodpressureResource {
 
-    private final Logger log = LoggerFactory.getLogger(PatientBloodplessureResource.class);
+    private final Logger log = LoggerFactory.getLogger(PatientBloodpressureResource.class);
 
-    private static final String ENTITY_NAME = "patientBloodplessure";
+    private static final String ENTITY_NAME = "patientBloodpressure";
 
-    private final PatientBloodplessureRepository patientBloodplessureRepository;
+    private final PatientBloodpressureRepository patientBloodplessureRepository;
 
     private final PatientService patientService;
 
-    public PatientBloodplessureResource(PatientBloodplessureRepository patientBloodplessureRepository, PatientService patientService) {
+    public PatientBloodpressureResource(PatientBloodpressureRepository patientBloodplessureRepository, PatientService patientService) {
         this.patientBloodplessureRepository = patientBloodplessureRepository;
         this.patientService = patientService;
     }
@@ -47,11 +47,11 @@ public class PatientBloodplessureResource {
      * patientBloodplessure has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PostMapping("/patient-bloodplessures")
+    @PostMapping("/patient-bloodpressures")
     @Timed
     @Transactional
-    public ResponseEntity<PatientBloodplessure> createPatientBloodplessure(@Valid @RequestBody PatientBloodplessure patientBloodplessure) throws Exception {
-        log.debug("REST request to save PatientBloodplessure : {}", patientBloodplessure);
+    public ResponseEntity<PatientBloodpressure> createPatientBloodplessure(@Valid @RequestBody PatientBloodpressure patientBloodplessure) throws Exception {
+        log.debug("REST request to save PatientBloodpressure : {}", patientBloodplessure);
         if (patientBloodplessure.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new patientBloodplessure cannot already have an ID")).body(null);
         }
@@ -59,13 +59,13 @@ public class PatientBloodplessureResource {
         patient.setPaDiastolique(patientBloodplessure.getPaDiastolique());
         patient.setPaSystolique(patientBloodplessure.getPaSystolique());
         patient.setWeight(patientBloodplessure.getWeight());
-        patient.setBloodplessureMesured(true);
-        patient.setDateLastBloodplessureMesured(LocalDate.now());
-        patient.setBloodplessureTomesure(!(patientBloodplessure.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatientAndDateReleveAfter(patientBloodplessure.getPatient(), LocalDate.now().minusMonths(2)) > 2));
+        patient.setBloodpressureMesured(true);
+        patient.setDateLastBloodpressureMesured(patientBloodplessure.getDateReleve());
+        patient.setBloodpressureTomesure(!(patientBloodplessure.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatientAndDateReleveAfter(patientBloodplessure.getPatient(), LocalDate.now().minusMonths(2)) > 2));
         patientService.updatePatient(patient);
 
-        PatientBloodplessure result = patientBloodplessureRepository.save(patientBloodplessure);
-        return ResponseEntity.created(new URI("/api/patient-bloodplessures/" + result.getId()))
+        PatientBloodpressure result = patientBloodplessureRepository.save(patientBloodplessure);
+        return ResponseEntity.created(new URI("/api/patient-bloodpressures/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
                 .body(result);
     }
@@ -79,24 +79,24 @@ public class PatientBloodplessureResource {
      * @return the ResponseEntity with status 200 (OK) and the list of
      * patientBloodplessures in body
      */
-    @GetMapping(path = "/patient-bloodplessures/{patientId}", params = {"fromDate", "toDate"})
+    @GetMapping(path = "/patient-bloodpressures/{patientId}", params = {"fromDate", "toDate"})
     @Timed
-    public ResponseEntity<List<PatientBloodplessure>> getAllPatientBloodplessuresByDate(
+    public ResponseEntity<List<PatientBloodpressure>> getAllPatientBloodplessuresByDate(
             @RequestParam(value = "fromDate") LocalDate fromDate, @RequestParam(value = "toDate") LocalDate toDate,
             @PathVariable Long patientId) {
         log.debug("REST request to get all PatientBloodplessures");
-        List<PatientBloodplessure> page = patientBloodplessureRepository
+        List<PatientBloodpressure> page = patientBloodplessureRepository
                 .findAllByPatientIdAndDateReleveBetweenOrderByDateReleveAsc(patientId, fromDate, toDate.plusDays(1));
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/patient-bloodplessures/{patientId}")
+    @GetMapping(path = "/patient-bloodpressures/{patientId}")
     @Timed
-    public ResponseEntity<List<PatientBloodplessure>> getAllPatientBloodplessuresByDate(@PathVariable Long patientId) {
-        log.debug("REST request to get all PatientBloodplessures");
+    public ResponseEntity<List<PatientBloodpressure>> getAllPatientBloodplessuresByDate(@PathVariable Long patientId) {
+        log.debug("REST request to get all PatientBloodpressures");
         LocalDate fromDate = LocalDate.now().minusMonths(3);
         LocalDate toDate = LocalDate.now().plusDays(1);
-        List<PatientBloodplessure> page = patientBloodplessureRepository
+        List<PatientBloodpressure> page = patientBloodplessureRepository
                 .findAllByPatientIdAndDateReleveBetweenOrderByDateReleveAsc(patientId, fromDate, toDate);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }

@@ -17,22 +17,22 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = App.class)
 @Transactional
-public class FirebaseTest {
+public class CalendarServiceTest {
 
     @Autowired
-    FirebaseService firebaseService;
+    CalendarService calendarService;
 
     private User user;
 
     @Before
     public void init() {
         user = new User();
-        user.setFirebaseToken("dwhKCzFh8Do:APA91bE_BDCT3hOIdgqMGJnRj7vWe9Ca-llzD-5McDltamwFOnXz3HVLMGHaulF2V9px2JkpIjErOYpMvVDfirr4DOsMLWsXMcEqcraowYMrboDDjryIjYnlXV3KALUPime7af0VXdbK");
+        user.setEmail("ngansop.arthur@gmail.com");
     }
 
     @Test
-    public void sendPushNotificationWithToken() throws Exception {
-        firebaseService.sendPushNotification(user, "Message FCM GODD");
+    public void createEvent() throws Exception {
+        // calendarService.createEvent(user);
     }
 
 }

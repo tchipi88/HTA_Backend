@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
  * @author tchipnangngansopa
  */
 @Entity
-public class PatientBloodplessure extends AbstractAuditingEntity {
+public class PatientBloodpressure extends AbstractAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,7 +88,7 @@ public class PatientBloodplessure extends AbstractAuditingEntity {
         this.dateReleve = dateReleve;
     }
 
-    public PatientBloodplessure() {
+    public PatientBloodpressure() {
     }
 
 }

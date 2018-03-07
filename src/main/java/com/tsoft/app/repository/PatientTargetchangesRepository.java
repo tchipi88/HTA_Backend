@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author tchipi
  */
 /**
- * Spring Data JPA repository for the PatientBloodplessure entity.
+ * Spring Data JPA repository for the PatientTargetchanges entity.
  */
 public interface PatientTargetchangesRepository extends JpaRepository<PatientTargetchanges, Long> {
 

@@ -1,10 +1,19 @@
 package com.tsoft.app.service.notification;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.tsoft.app.domain.User;
 import java.io.IOException;
 import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +80,7 @@ public class FirebaseService {
 
             body.put("notification", notification);
 
-            sendPushNotification(body);
+            sendPushNotificationHttpV1Api(body);
         }
     }
 
@@ -84,4 +93,31 @@ public class FirebaseService {
                 response.toString());
         return response;
     }
+
+    public void sendPushNotificationHttpV1Api(JSONObject pushNotificationHttpV1ApiDto) throws Exception {
+        LOGGER.debug("Start Send Push Notification  to  {} ", pushNotificationHttpV1ApiDto.getString("to"));
+
+        // Construct the objects needed for the request
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost("https://fcm.googleapis.com/v1/projects/smoovengo-android/messages:send");
+
+        String token = getAccessToken();
+        // The message we are going to post
+        httpPost.addHeader("Authorization", "Bearer " + token);
+        httpPost.addHeader("Content-Type", "application/json");
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
+        StringEntity body = new StringEntity(mapper.writeValueAsString(pushNotificationHttpV1ApiDto), ContentType.APPLICATION_JSON);
+        body.setContentType("application/json");
+        httpPost.setEntity(body);
+
+        // Make the request
+        HttpResponse response = httpClient.execute(httpPost);
+        LOGGER.debug("End PostRequest Firebase  with status {}  and content {}", response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity()));
+        // release connection
+        httpPost.releaseConnection();
+
+    }
+
 }

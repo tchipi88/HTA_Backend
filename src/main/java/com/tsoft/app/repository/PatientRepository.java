@@ -46,13 +46,13 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     public long countByDateLastConsultationBetweenAndCreatedBy(LocalDate fromDate, LocalDate toDate, String currentUserLogin);
 
-    @Query("select p from Patient p where  p.bloodplessureTreatment=true  and p.chw.email= ?#{ principal?.username }")
+    @Query("select p from Patient p where  p.bloodpressureTreatment=true  and p.chw.email= ?#{ principal?.username }")
     public Page<Patient> findAllByChwIsTreatement(Pageable pageable);
 
-    @Query("select p from Patient p where p.bloodplessureTreatment=true  and  p.chw.medecin.email= ?#{ principal?.username }")
+    @Query("select p from Patient p where p.bloodpressureTreatment=true  and  p.chw.medecin.email= ?#{ principal?.username }")
     public Page<Patient> findAllByMEdecinIsTreatement(Pageable pageable);
 
-    public Page<Patient> findAllByBloodplessureTreatment(boolean b, Pageable pageable);
+    public Page<Patient> findAllByBloodpressureTreatment(boolean b, Pageable pageable);
 
 
     public Page<Patient> findAllByChwEmailOrderByCvdRisk(String currentUserLogin, Pageable pageable);
@@ -89,14 +89,14 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("select p from Patient p where p.recommandationVisitDoctor!='BP_TBP'")
     public Page<Patient> findAllByRecommandationVisitDoctor(Pageable pageable);
 
-    //monitoring Blood Plessure
+    //monitoring Blood Pressure
 
-    public Page<Patient> findAllByBloodplessureTomesure(boolean b, Pageable pageable);
+    public Page<Patient> findAllByBloodpressureTomesure(boolean b, Pageable pageable);
 
-    @Query("select p from Patient p where  p.bloodplessureTomesure=true  and p.chw.email= ?#{ principal?.username }")
-    public Page<Patient> findAllByChwBloodplessureTomesure(Pageable pageable);
+    @Query("select p from Patient p where  p.bloodpressureTomesure=true  and p.chw.email= ?#{ principal?.username }")
+    public Page<Patient> findAllByChwBloodpressureTomesure(Pageable pageable);
 
-    @Query("select p from Patient p where p.bloodplessureTomesure=true  and  p.chw.medecin.email= ?#{ principal?.username }")
-    public Page<Patient> findAllByMedecinBloodplessureTomesure(Pageable pageable);
+    @Query("select p from Patient p where p.bloodpressureTomesure=true  and  p.chw.medecin.email= ?#{ principal?.username }")
+    public Page<Patient> findAllByMedecinBloodpressureTomesure(Pageable pageable);
 
 }

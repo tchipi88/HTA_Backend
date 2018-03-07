@@ -632,12 +632,15 @@ public class PatientService {
         if (patient.getPaSystolique() >= 140 && patient.getPaSystolique() < 180
                 && (Risque.MEDIUM.equals(cvdRisk) || Risque.LOW.equals(cvdRisk))) {
             patient.setRecommandationFrequenceProgramSuvi(RecommandationFrequenceProgramSuvi.MONTH);
+            patient.setDateNextBloodpressureMesure(patient.getDateLastBloodpressureMesured().plusMonths(1));
         }
         if (patient.getPaSystolique() >= 180 && (Risque.MEDIUM.equals(cvdRisk) || Risque.LOW.equals(cvdRisk))) {
             patient.setRecommandationFrequenceProgramSuvi(RecommandationFrequenceProgramSuvi.TWO_WEEKS);
+            patient.setDateNextBloodpressureMesure(patient.getDateLastBloodpressureMesured().plusWeeks(2));
         }
         if (patient.getPaSystolique() >= 140 && (Risque.HIGH.equals(cvdRisk))) {
             patient.setRecommandationFrequenceProgramSuvi(RecommandationFrequenceProgramSuvi.TWO_WEEKS);
+            patient.setDateNextBloodpressureMesure(patient.getDateLastBloodpressureMesured().plusWeeks(2));
         }
 
         if (patient.getPaSystolique() >= 140) {
@@ -756,7 +759,7 @@ public class PatientService {
             }
             if (query.equalsIgnoreCase("isTreatement")) {
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
-                    return patientRepository.findAllByBloodplessureTreatment(true, pageable);
+                    return patientRepository.findAllByBloodpressureTreatment(true, pageable);
                 }
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_CHW.name())) {
                     return patientRepository.findAllByChwIsTreatement(pageable);
@@ -766,15 +769,15 @@ public class PatientService {
                 }
             }
 
-            if (query.equalsIgnoreCase("bloodplessureTomesure")) {
+            if (query.equalsIgnoreCase("bloodpressureTomesure")) {
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_ADMIN.name())) {
-                    return patientRepository.findAllByBloodplessureTomesure(true, pageable);
+                    return patientRepository.findAllByBloodpressureTomesure(true, pageable);
                 }
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_CHW.name())) {
-                    return patientRepository.findAllByChwBloodplessureTomesure(pageable);
+                    return patientRepository.findAllByChwBloodpressureTomesure(pageable);
                 }
                 if (SecurityUtils.isCurrentUserInRole(Profil.ROLE_MEDECIN.name())) {
-                    return patientRepository.findAllByMedecinBloodplessureTomesure(pageable);
+                    return patientRepository.findAllByMedecinBloodpressureTomesure(pageable);
                 }
             }
 

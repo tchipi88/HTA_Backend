@@ -72,10 +72,11 @@ public class Patient extends AbstractAuditingEntity {
     private boolean diabetesFamily;
     private boolean hypertensionFamily;
 
-    private boolean bloodplessureMesured;
-    private LocalDate dateLastBloodplessureMesured;
-    private boolean bloodplessureTreatment;
-    private boolean bloodplessureTomesure;
+    private boolean bloodpressureMesured;
+    private LocalDate dateLastBloodpressureMesured;
+    private LocalDate dateNextBloodpressureMesure;
+    private boolean bloodpressureTreatment;
+    private boolean bloodpressureTomesure;
 
     private boolean hypertension;
     private boolean diabetique;
@@ -262,28 +263,28 @@ public class Patient extends AbstractAuditingEntity {
         this.hypertensionFamily = hypertensionFamily;
     }
 
-    public boolean isBloodplessureMesured() {
-        return bloodplessureMesured;
+    public boolean isBloodpressureMesured() {
+        return bloodpressureMesured;
     }
 
-    public void setBloodplessureMesured(boolean bloodplessureMesured) {
-        this.bloodplessureMesured = bloodplessureMesured;
+    public void setBloodpressureMesured(boolean bloodpressureMesured) {
+        this.bloodpressureMesured = bloodpressureMesured;
     }
 
-    public LocalDate getDateLastBloodplessureMesured() {
-        return dateLastBloodplessureMesured;
+    public LocalDate getDateLastBloodpressureMesured() {
+        return dateLastBloodpressureMesured;
     }
 
-    public void setDateLastBloodplessureMesured(LocalDate lastDateBloodPressureMesured) {
-        this.dateLastBloodplessureMesured = lastDateBloodPressureMesured;
+    public void setDateLastBloodpressureMesured(LocalDate lastDateBloodPressureMesured) {
+        this.dateLastBloodpressureMesured = lastDateBloodPressureMesured;
     }
 
-    public boolean isBloodplessureTreatment() {
-        return bloodplessureTreatment;
+    public boolean isBloodpressureTreatment() {
+        return bloodpressureTreatment;
     }
 
-    public void setBloodplessureTreatment(boolean bloodplessureTreatment) {
-        this.bloodplessureTreatment = bloodplessureTreatment;
+    public void setBloodpressureTreatment(boolean bloodpressureTreatment) {
+        this.bloodpressureTreatment = bloodpressureTreatment;
     }
 
     public boolean isHypertension() {
@@ -526,12 +527,21 @@ public class Patient extends AbstractAuditingEntity {
         this.monitoringTreatment = monitoringTreatment;
     }
 
-    public boolean isBloodplessureTomesure() {
-        return bloodplessureTomesure;
+    public boolean isBloodpressureTomesure() {
+        return bloodpressureTomesure;
     }
 
-    public void setBloodplessureTomesure(boolean bloodplessureTomesure) {
-        this.bloodplessureTomesure = bloodplessureTomesure;
+    public void setBloodpressureTomesure(boolean bloodpressureTomesure) {
+        this.bloodpressureTomesure = bloodpressureTomesure;
     }
+
+    public LocalDate getDateNextBloodpressureMesure() {
+        return dateNextBloodpressureMesure;
+    }
+
+    public void setDateNextBloodpressureMesure(LocalDate dateNextBloodpressureMesure) {
+        this.dateNextBloodpressureMesure = dateNextBloodpressureMesure;
+    }
+
 
 }
