@@ -110,6 +110,22 @@ public class PatientResource {
         return new ResponseEntity<>(patientService.getPatients(query, pageable), HttpStatus.OK);
     }
 
+ /**
+     * SEARCH /_search/patients?query=:query : search for the patient
+     * corresponding to the query.
+     *
+     * @param query the query of the patient search
+     * @return the result of the search
+     */
+    @GetMapping("/patientss")
+    @Timed
+    public ResponseEntity<Page<Patient>> searchPatients(@RequestParam String query, @ApiParam Pageable pageable) {
+        log.debug("REST request to search Patients for query {}", query);
+        Page<Patient> page = patientSearchRepository.search(queryStringQuery(query), pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/patientss");
+        return new ResponseEntity<>(page, headers, HttpStatus.OK);
+    }
+    
     /**
      * GET /patients/:id : get the "id" patient.
      *
@@ -140,21 +156,7 @@ public class PatientResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
-    /**
-     * SEARCH /_search/patients?query=:query : search for the patient
-     * corresponding to the query.
-     *
-     * @param query the query of the patient search
-     * @return the result of the search
-     */
-    @GetMapping("/patientss")
-    @Timed
-    public ResponseEntity<Page<Patient>> searchPatients(@RequestParam String query, @ApiParam Pageable pageable) {
-        log.debug("REST request to search Patients for query {}", query);
-        Page<Patient> page = patientSearchRepository.search(queryStringQuery(query), pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/patientss");
-        return new ResponseEntity<>(page, headers, HttpStatus.OK);
-    }
+   
 
     @GetMapping(path = "/patients-dashboard", params = {"fromDate", "toDate"})
     @Timed

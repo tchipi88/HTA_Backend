@@ -4,8 +4,6 @@ import com.tsoft.app.domain.User;
 import com.tsoft.app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,11 +35,8 @@ public class DomainUserDetailsService implements UserDetailsService {
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + login + " was not activated");
             }
-            List<GrantedAuthority> grantedAuthorities = new ArrayList();
-            grantedAuthorities.add(new SimpleGrantedAuthority(user.getProfil().name()));
-            return new org.springframework.security.core.userdetails.User(login,
-                    user.getPassword(),
-                    grantedAuthorities);
+           
+            return user;
         }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the "
                 + "database"));
     }

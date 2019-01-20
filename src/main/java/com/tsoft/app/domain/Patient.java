@@ -132,6 +132,8 @@ public class Patient extends AbstractAuditingEntity {
 
     private boolean monitoringTreatment;
 
+    private int numberVisit;
+
     public Patient() {
     }
 
@@ -544,4 +546,11 @@ public class Patient extends AbstractAuditingEntity {
     }
 
 
+    public int getNumberVisit() {
+        return numberVisit;
+    }
+
+    public void setNumberVisit(int numberVisit) {
+        this.numberVisit = numberVisit;
+    }
 }

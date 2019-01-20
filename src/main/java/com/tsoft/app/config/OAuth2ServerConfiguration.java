@@ -1,6 +1,7 @@
 package com.tsoft.app.config;
 
 import com.tsoft.app.security.AuthoritiesConstants;
+import com.tsoft.app.security.CustomTokenEnhancer;
 import io.github.jhipster.security.AjaxLogoutSuccessHandler;
 import io.github.jhipster.security.Http401UnauthorizedEntryPoint;
 import javax.sql.DataSource;
@@ -23,6 +24,7 @@ import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -89,7 +91,7 @@ public class OAuth2ServerConfiguration {
                     .antMatchers("/api/init").permitAll().antMatchers("/api/register").permitAll().antMatchers("/api/profile-info")
                     .permitAll().antMatchers("/api/**").authenticated().antMatchers("/management/**")
                     .hasAuthority(AuthoritiesConstants.ADMIN).antMatchers("/v2/api-docs/**").permitAll()
-                    .antMatchers("/swagger-resources/configuration/ui").permitAll()                    .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
+                    .antMatchers("/swagger-resources/configuration/ui").permitAll().antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }
 
         @Override
@@ -133,6 +135,7 @@ public class OAuth2ServerConfiguration {
                     .authorizationCodeServices(authorizationCodeServices())
                     .approvalStore(approvalStore())
                     .tokenStore(tokenStore)
+                    .tokenEnhancer(tokenEnhancer())
                     .authenticationManager(authenticationManager);
         }
 
@@ -152,6 +155,11 @@ public class OAuth2ServerConfiguration {
 //VALUES
 //    ("clientHTA", "123456", "read,write",
 //    "password,authorization_code,refresh_token", null, "ROLE_CHW,ROLE_MEDECIN,ROLE_ADMIN", 36000, 36000, null, true);
+        }
+
+        @Bean
+        public TokenEnhancer tokenEnhancer() {
+            return new CustomTokenEnhancer();
         }
     }
 }

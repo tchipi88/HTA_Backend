@@ -4,12 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsoft.app.domain.enumeration.Gender;
 import com.tsoft.app.domain.enumeration.Profil;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * A user.
@@ -17,7 +23,7 @@ import org.hibernate.validator.constraints.Email;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User extends AbstractAuditingEntity {
+public class User extends AbstractAuditingEntity implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -218,6 +224,38 @@ public class User extends AbstractAuditingEntity {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> grantedAuthorities = new ArrayList();
+            grantedAuthorities.add(new SimpleGrantedAuthority(profil.name()));
+        return grantedAuthorities;
+    }
+
+    @Override
+    public String getUsername() {
+       return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+       return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+       return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return  resetDate==null;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return activated;
     }
 
 }

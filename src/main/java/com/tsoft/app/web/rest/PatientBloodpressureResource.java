@@ -62,6 +62,7 @@ public class PatientBloodpressureResource {
         patient.setBloodpressureMesured(true);
         patient.setDateLastBloodpressureMesured(patientBloodplessure.getDateReleve());
         patient.setBloodpressureTomesure(!(patientBloodplessure.getPaSystolique() < 120 && patientBloodplessureRepository.countByPatientAndDateReleveAfter(patientBloodplessure.getPatient(), LocalDate.now().minusMonths(2)) > 2));
+        patient.setNumberVisit(patient.getNumberVisit()+1);
         patientService.updatePatient(patient);
 
         PatientBloodpressure result = patientBloodplessureRepository.save(patientBloodplessure);

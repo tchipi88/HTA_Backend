@@ -14,7 +14,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,22 +80,21 @@ public class FirebaseService {
 
             body.put("notification", notification);
 
-            sendPushNotificationHttpV1Api(body);
+            sendPushNotification(body);
         }
     }
 
     private ResponseEntity<String> sendPushNotification(JSONObject pushNotificationHttpV1ApiDto) throws Exception {
-        LOGGER.debug("Start Send Push Notification  to  {} ", pushNotificationHttpV1ApiDto.getString("to"));
+       // LOGGER.debug("Start Send Push Notification  to  {} ", pushNotificationHttpV1ApiDto.getString("to"));
         String baseUri = "https://fcm.googleapis.com/v1/projects/ganeo-hta/messages:send";
         HttpEntity<String> httpEntity = new HttpEntity(pushNotificationHttpV1ApiDto.toString(), createHeaders());
         ResponseEntity<String> response = restTemplate.exchange(baseUri, HttpMethod.POST, httpEntity, String.class);
-        LOGGER.debug("Start Send Push Notification  to  {} with content  with response {}", pushNotificationHttpV1ApiDto.getString("to"),
-                response.toString());
+//        LOGGER.debug("Start Send Push Notification  to  {} with content  with response {}", pushNotificationHttpV1ApiDto.getString("to"),
+//                response.toString());
         return response;
     }
 
     public void sendPushNotificationHttpV1Api(JSONObject pushNotificationHttpV1ApiDto) throws Exception {
-        LOGGER.debug("Start Send Push Notification  to  {} ", pushNotificationHttpV1ApiDto.getString("to"));
 
         // Construct the objects needed for the request
         HttpClient httpClient = HttpClientBuilder.create().build();

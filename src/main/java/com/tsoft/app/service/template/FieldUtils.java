@@ -30,7 +30,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Email;
-import org.json.JSONArray;
 import org.springframework.util.ReflectionUtils;
 
 /**
